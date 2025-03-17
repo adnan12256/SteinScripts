@@ -69,7 +69,7 @@ class SteinLootAppraiser:
     def get_item_info_from_inventory(self) -> dict:
         # get all item in the inventory
         inventory_slots = self.page.locator("div#stein-inventory-slots div.stein-item-inventory-slot")
-        slot_count = inventory_slots.count()
+        slot_count: int | Coroutine[Any, Any, int] = inventory_slots.count()
         inventory_info = {}
         for i in range(slot_count):
             slot = inventory_slots.nth(i)
