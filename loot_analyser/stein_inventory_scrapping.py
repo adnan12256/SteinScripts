@@ -216,7 +216,7 @@ class SteinLootAppraiser:
         return drop_item_info
 
     def compare_loot_with_inventory(self, inventory_info: dict[str, WeaponItem | ArmorItem], dropped_items_dict: dict[str, WeaponItem | ArmorItem]):
-        dropped_items_dict = {'Aries': WeaponItem(item_name='Aries', item_type='Waterfall', item_description='Deals 185-344 damage (+65% Bonus) forwardsand 168-313 damage (+85% Bonus) backwards', item_activation_cost=' 56 Mana', item_cast_time='Casttime: 0.80 sec', item_cooldown_time='Cooldown: 6.40 sec')}
+        # dropped_items_dict = {'Aries': WeaponItem(item_name='Aries', item_type='Waterfall', item_description='Deals 185-344 damage (+65% Bonus) forwardsand 168-313 damage (+85% Bonus) backwards', item_activation_cost=' 56 Mana', item_cast_time='Casttime: 0.80 sec', item_cooldown_time='Cooldown: 6.40 sec')}
         for item_name, stats in dropped_items_dict.items():
             inventory_item_match = [key for key in inventory_info.keys() if key.startswith(item_name)]
             if len(inventory_item_match) > 0:

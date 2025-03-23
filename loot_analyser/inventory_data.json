@@ -5,7 +5,8 @@
         "item_description": "Heal 21-39 (+15% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 0.80 sec"
+        "item_cooldown_time": "Cooldown: 0.80 sec",
+        "legacy": false
     },
     "Hellion Headguard": {
         "item_name": "Hellion Headguard",
@@ -19,7 +20,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Defiance": {
         "item_name": "Defiance",
@@ -27,7 +29,8 @@
         "item_description": "Hit the target for 36-67 damage (+15% Bonus) and gives you 1 Corruption.",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 0.80 sec"
+        "item_cooldown_time": "Cooldown: 0.80 sec",
+        "legacy": false
     },
     "Serezith Headguard": {
         "item_name": "Serezith Headguard",
@@ -41,7 +44,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Jael": {
         "item_name": "Jael",
@@ -49,7 +53,8 @@
         "item_description": "22-41 Death Damage (+15% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 0.60 sec"
+        "item_cooldown_time": "Cooldown: 0.60 sec",
+        "legacy": false
     },
     "Ritual Headguard": {
         "item_name": "Ritual Headguard",
@@ -63,7 +68,8 @@
         "item_mana": "+151 Mana",
         "item_mana_regen": "+2.5 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Lauden": {
         "item_name": "Lauden",
@@ -71,7 +77,8 @@
         "item_description": "10-19 Physical Damage (+15% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 0.60 sec"
+        "item_cooldown_time": "Cooldown: 0.60 sec",
+        "legacy": false
     },
     "Necromantic Headguard": {
         "item_name": "Necromantic Headguard",
@@ -85,7 +92,8 @@
         "item_mana": "+151 Mana",
         "item_mana_regen": "+2.5 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Draco": {
         "item_name": "Draco",
@@ -93,7 +101,8 @@
         "item_description": "30-55 Water Damage (+15% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 0.80 sec"
+        "item_cooldown_time": "Cooldown: 0.80 sec",
+        "legacy": false
     },
     "Grave Headguard": {
         "item_name": "Grave Headguard",
@@ -107,7 +116,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Icharus": {
         "item_name": "Icharus",
@@ -115,7 +125,8 @@
         "item_description": "37-68 Earth Damage (+15% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 1.00 sec"
+        "item_cooldown_time": "Cooldown: 1.00 sec",
+        "legacy": false
     },
     "Constellation Chestplate": {
         "item_name": "Constellation Chestplate",
@@ -129,7 +140,8 @@
         "item_mana": "+286 Mana",
         "item_mana_regen": "+4.9 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Reyes": {
         "item_name": "Reyes",
@@ -137,7 +149,8 @@
         "item_description": "Teleport to the target position and deal 227-422 damage (+100% Bonus)",
         "item_activation_cost": " 41 Mana",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 20.00 sec"
+        "item_cooldown_time": "Cooldown: 20.00 sec",
+        "legacy": false
     },
     "Hellion Chestplate": {
         "item_name": "Hellion Chestplate",
@@ -151,7 +164,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Catarina's Demise": {
         "item_name": "Catarina's Demise",
@@ -159,7 +173,8 @@
         "item_description": "The Void Hex damages the hit enemies over 5.00 seconds for 81 damage (+26% Bonus) per secondand gives you 2 Corruption while Inflicting 41 damage (+10% Bonus) to yourself.",
         "item_activation_cost": " 30 Mana",
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 4.00 sec"
+        "item_cooldown_time": "Cooldown: 4.00 sec",
+        "legacy": false
     },
     "Serezith Chestplate": {
         "item_name": "Serezith Chestplate",
@@ -173,7 +188,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Crafted Crying Broadaxe": {
         "item_name": "Crafted Crying Broadaxe",
@@ -181,7 +197,8 @@
         "item_description": "63-116 Death Damage (+100% Bonus)",
         "item_activation_cost": " 5 Energy",
         "item_cast_time": "Casttime: 0.48 sec",
-        "item_cooldown_time": "Cooldown: 2.40 sec"
+        "item_cooldown_time": "Cooldown: 2.40 sec",
+        "legacy": true
     },
     "Ritual Chestplate": {
         "item_name": "Ritual Chestplate",
@@ -195,7 +212,8 @@
         "item_mana": "+278 Mana",
         "item_mana_regen": "+4.9 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Urei": {
         "item_name": "Urei",
@@ -203,7 +221,8 @@
         "item_description": "Executes an enemy and deal 55-102 damage (+80% Bonus) and 145% Threat",
         "item_activation_cost": " 6 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 3.00 sec"
+        "item_cooldown_time": "Cooldown: 3.00 sec",
+        "legacy": false
     },
     "Necromantic Chestplate": {
         "item_name": "Necromantic Chestplate",
@@ -217,7 +236,8 @@
         "item_mana": "+278 Mana",
         "item_mana_regen": "+4.8 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Vercingetorix": {
         "item_name": "Vercingetorix",
@@ -225,7 +245,8 @@
         "item_description": "149-278 Water Damage (+80% Bonus)",
         "item_activation_cost": " 31 Mana",
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 4.00 sec"
+        "item_cooldown_time": "Cooldown: 4.00 sec",
+        "legacy": false
     },
     "Grave Chestplate": {
         "item_name": "Grave Chestplate",
@@ -239,7 +260,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Pintio": {
         "item_name": "Pintio",
@@ -247,7 +269,8 @@
         "item_description": "Shoots a powerful shot that deals 144-269 damage (+80% Bonus)Marks hit enemies with the Hunter's Mark for 5.00 seconds",
         "item_activation_cost": " 10 Energy",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 5.00 sec"
+        "item_cooldown_time": "Cooldown: 5.00 sec",
+        "legacy": false
     },
     "Constellation Legguards": {
         "item_name": "Constellation Legguards",
@@ -261,7 +284,8 @@
         "item_mana": "+199 Mana",
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Hellion Legguards": {
         "item_name": "Hellion Legguards",
@@ -275,7 +299,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Imbalance": {
         "item_name": "Imbalance",
@@ -283,7 +308,8 @@
         "item_description": "Burns the enemies life for 364-676 damage (+26% Bonus) and gives you up to 3 Corruption.While Channeling inflicting 71 damage (+15% Bonus) to yourself.",
         "item_activation_cost": " 54 Mana",
         "item_cast_time": "Casttime: 1.60 sec",
-        "item_cooldown_time": "Cooldown: 8.00 sec"
+        "item_cooldown_time": "Cooldown: 8.00 sec",
+        "legacy": false
     },
     "Serezith Legguards": {
         "item_name": "Serezith Legguards",
@@ -297,7 +323,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Dragon": {
         "item_name": "Dragon",
@@ -305,7 +332,8 @@
         "item_description": "Reckless Slam deals 65-120 damage (+65% Bonus)Enemies receive a bleed that deals 19 damage (+13% Bonus) per second over 5.00 seconds",
         "item_activation_cost": " 10 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 4.80 sec"
+        "item_cooldown_time": "Cooldown: 4.80 sec",
+        "legacy": false
     },
     "Ritual Legguards": {
         "item_name": "Ritual Legguards",
@@ -319,7 +347,8 @@
         "item_mana": "+196 Mana",
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Alexander": {
         "item_name": "Alexander",
@@ -327,7 +356,8 @@
         "item_description": "Roar and deal 70-130 damage (+130% Bonus) and 179% ThreatYou have a chance of 30% to receive 80 Armor for 2.00 seconds",
         "item_activation_cost": " 8 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 4.80 sec"
+        "item_cooldown_time": "Cooldown: 4.80 sec",
+        "legacy": false
     },
     "Necromantic Legguards": {
         "item_name": "Necromantic Legguards",
@@ -341,7 +371,8 @@
         "item_mana": "+202 Mana",
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Aries": {
         "item_name": "Aries",
@@ -349,7 +380,8 @@
         "item_description": "Deals 185-344 damage (+65% Bonus) forwardsand 168-313 damage (+85% Bonus) backwards",
         "item_activation_cost": " 56 Mana",
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 6.40 sec"
+        "item_cooldown_time": "Cooldown: 6.40 sec",
+        "legacy": false
     },
     "Grave Legguards": {
         "item_name": "Grave Legguards",
@@ -363,7 +395,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Pincer": {
         "item_name": "Pincer",
@@ -371,7 +404,8 @@
         "item_description": "Traps enemies with a net for 2.00 seconds and deals 239-444 damage (+130% Bonus) over 5.00 secondsEach enemy is marked with hunter's mark for 5.00 seconds",
         "item_activation_cost": " 11 Energy",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 15.00 sec"
+        "item_cooldown_time": "Cooldown: 15.00 sec",
+        "legacy": false
     },
     "Constellation Shoulders": {
         "item_name": "Constellation Shoulders",
@@ -385,7 +419,8 @@
         "item_mana": "+146 Mana",
         "item_mana_regen": "+2.5 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Dommik": {
         "item_name": "Dommik",
@@ -393,7 +428,8 @@
         "item_description": "Heal 91 (+20%% Bonus) every 2.00 sec for 10.00 secs. Receive +12 Heal for 10.00 secs",
         "item_activation_cost": " 50 Mana",
         "item_cast_time": "Casttime: 0.84 sec",
-        "item_cooldown_time": "Cooldown: 24.07 sec"
+        "item_cooldown_time": "Cooldown: 24.07 sec",
+        "legacy": true
     },
     "Hellion Shoulders": {
         "item_name": "Hellion Shoulders",
@@ -407,7 +443,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Anarchy": {
         "item_name": "Anarchy",
@@ -415,7 +452,8 @@
         "item_description": "Sacrifice your Corruption to heal yourself for 35-65 life (+3% Bonus) for each consumed stack of Corruption.",
         "item_activation_cost": " 69 Mana",
         "item_cast_time": "Casttime: 1.60 sec",
-        "item_cooldown_time": "Cooldown: 8.00 sec"
+        "item_cooldown_time": "Cooldown: 8.00 sec",
+        "legacy": false
     },
     "Serezith Shoulders": {
         "item_name": "Serezith Shoulders",
@@ -429,7 +467,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Demidicus": {
         "item_name": "Demidicus",
@@ -437,7 +476,8 @@
         "item_description": "Four short strikes in a row deal 40-75 damage (+38% bonus) per hitEnemies suffering from bleeding receive 100% bonus damage on the 4th strike",
         "item_activation_cost": " 15 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 7.20 sec"
+        "item_cooldown_time": "Cooldown: 7.20 sec",
+        "legacy": false
     },
     "Ritual Shoulders": {
         "item_name": "Ritual Shoulders",
@@ -451,7 +491,8 @@
         "item_mana": "+149 Mana",
         "item_mana_regen": "+2.4 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Asa": {
         "item_name": "Asa",
@@ -459,7 +500,8 @@
         "item_description": "Distract an enemy and deal 66-123 damage (+150% Bonus) and 234% Threat",
         "item_activation_cost": " 10 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 6.00 sec"
+        "item_cooldown_time": "Cooldown: 6.00 sec",
+        "legacy": false
     },
     "Necromantic Shoulders": {
         "item_name": "Necromantic Shoulders",
@@ -473,7 +515,8 @@
         "item_mana": "+141 Mana",
         "item_mana_regen": "+2.4 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Centaurus": {
         "item_name": "Centaurus",
@@ -481,7 +524,8 @@
         "item_description": "Gives yourself a shield for 5.00 seconds against the next attackwhich throws back up to 382 Damage (+100% Bonus) to your enemy.",
         "item_activation_cost": " 33 Mana",
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 20.00 sec"
+        "item_cooldown_time": "Cooldown: 20.00 sec",
+        "legacy": false
     },
     "Grave Shoulders": {
         "item_name": "Grave Shoulders",
@@ -495,7 +539,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Opus": {
         "item_name": "Opus",
@@ -503,7 +548,8 @@
         "item_description": "Poisons the hit enemies for 6.00 seconds and deals 56 damage (+26% Bonus) per secondEach enemy is marked with hunter's mark for 5.00 seconds",
         "item_activation_cost": " 20 Energy",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 9.00 sec"
+        "item_cooldown_time": "Cooldown: 9.00 sec",
+        "legacy": false
     },
     "Advanced Constellation Gauntlets": {
         "item_name": "Advanced Constellation Gauntlets",
@@ -517,7 +563,8 @@
         "item_mana": "+108 Mana",
         "item_mana_regen": "+1.7 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Colin": {
         "item_name": "Colin",
@@ -525,7 +572,8 @@
         "item_description": "Gives every ally hit a shield up to 487 (+100% Bonus) for 20.00 seconds.Shield amount gets divided between the allies hit.",
         "item_activation_cost": " 84 Mana",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 10.00 sec"
+        "item_cooldown_time": "Cooldown: 10.00 sec",
+        "legacy": false
     },
     "Advanced Hellion Gauntlets": {
         "item_name": "Advanced Hellion Gauntlets",
@@ -539,7 +587,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Torment": {
         "item_name": "Torment",
@@ -547,7 +596,8 @@
         "item_description": "Sacrifice your Corruption to deal 46-87 damage (+10% Bonus) for each consumed stack of Corruption.",
         "item_activation_cost": " 31 Mana",
         "item_cast_time": "Casttime: 1.60 sec",
-        "item_cooldown_time": "Cooldown: 12.00 sec"
+        "item_cooldown_time": "Cooldown: 12.00 sec",
+        "legacy": false
     },
     "Advanced Serezith Gauntlets": {
         "item_name": "Advanced Serezith Gauntlets",
@@ -561,7 +611,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Crafted Dualblade": {
         "item_name": "Crafted Dualblade",
@@ -569,7 +620,8 @@
         "item_description": "Receive +1.0 Energy Regeneration for 5.00 secs. 189-351 Death Damage (+100% Bonus)",
         "item_activation_cost": " 5 Energy",
         "item_cast_time": "Casttime: 0.48 sec",
-        "item_cooldown_time": "Cooldown: 28.80 sec"
+        "item_cooldown_time": "Cooldown: 28.80 sec",
+        "legacy": true
     },
     "Advanced Vampiric Gauntlets": {
         "item_name": "Advanced Vampiric Gauntlets",
@@ -583,7 +635,8 @@
         "item_mana": "+107 Mana",
         "item_mana_regen": "+1.7 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Nicu": {
         "item_name": "Nicu",
@@ -591,7 +644,8 @@
         "item_description": "Taunt the enemies infront of you and does 89-166 damage (+100% Bonus) and 514% Threat.",
         "item_activation_cost": " 10 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 40.00 sec"
+        "item_cooldown_time": "Cooldown: 40.00 sec",
+        "legacy": false
     },
     "Advanced Necromantic Gauntlets": {
         "item_name": "Advanced Necromantic Gauntlets",
@@ -605,7 +659,8 @@
         "item_mana": "+108 Mana",
         "item_mana_regen": "+1.7 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Orion": {
         "item_name": "Orion",
@@ -613,7 +668,8 @@
         "item_description": "Places totem that deals 85 damage (+13% Bonus) every secondand reduces movement speed by 56% for 4.00 seconds",
         "item_activation_cost": " 95 Mana",
         "item_cast_time": "Casttime: 0.50 sec",
-        "item_cooldown_time": "Cooldown: 12.00 sec"
+        "item_cooldown_time": "Cooldown: 12.00 sec",
+        "legacy": false
     },
     "Advanced Grave Gauntlets": {
         "item_name": "Advanced Grave Gauntlets",
@@ -627,7 +683,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Artemis ": {
         "item_name": "Artemis ",
@@ -635,7 +692,8 @@
         "item_description": "Shoots 5 arrows that deal 181-336 damage (+150% Bonus)and +8% damage for each hunter mark on the enemy",
         "item_activation_cost": " 23 Energy",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 10.00 sec"
+        "item_cooldown_time": "Cooldown: 10.00 sec",
+        "legacy": false
     },
     "Advanced Constellation Warboots": {
         "item_name": "Advanced Constellation Warboots",
@@ -649,7 +707,8 @@
         "item_mana": "+106 Mana",
         "item_mana_regen": "+1.7 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Sirius": {
         "item_name": "Sirius",
@@ -657,7 +716,8 @@
         "item_description": "Gives heal buff for 5.00 seconds which heals 113 (+30% Bonus) every second",
         "item_activation_cost": " 159 Mana",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 10.00 sec"
+        "item_cooldown_time": "Cooldown: 10.00 sec",
+        "legacy": false
     },
     "Hellion Warboots": {
         "item_name": "Hellion Warboots",
@@ -671,7 +731,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Havoc": {
         "item_name": "Havoc",
@@ -679,7 +740,8 @@
         "item_description": "Receive +161 Soul Damage for 4.00 secs. Receive 154 Soul Damage. Restores 140 Mana",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 16.00 sec"
+        "item_cooldown_time": "Cooldown: 16.00 sec",
+        "legacy": false
     },
     "Advanced Serezith Boots": {
         "item_name": "Advanced Serezith Boots",
@@ -693,7 +755,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Reos": {
         "item_name": "Reos",
@@ -701,7 +764,8 @@
         "item_description": "For 4.00 seconds deal 88-165 damage (+50% bonus) per secondSnare the enemy for 1.50 seconds",
         "item_activation_cost": " 6 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 9.00 sec"
+        "item_cooldown_time": "Cooldown: 9.00 sec",
+        "legacy": false
     },
     "Advanced Vampiric Boots": {
         "item_name": "Advanced Vampiric Boots",
@@ -715,7 +779,8 @@
         "item_mana": "+104 Mana",
         "item_mana_regen": "+1.7 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Crafted Deluded Guardian": {
         "item_name": "Crafted Deluded Guardian",
@@ -723,7 +788,8 @@
         "item_description": "Receive +14 Armor for 10.00 secs. 94-175 Physical Damage (+100% Bonus)",
         "item_activation_cost": " 5 Energy",
         "item_cast_time": "Casttime: 0.48 sec",
-        "item_cooldown_time": "Cooldown: 14.40 sec"
+        "item_cooldown_time": "Cooldown: 14.40 sec",
+        "legacy": true
     },
     "Advanced Necromantic Boots": {
         "item_name": "Advanced Necromantic Boots",
@@ -737,7 +803,8 @@
         "item_mana": "+108 Mana",
         "item_mana_regen": "+1.7 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Pisces": {
         "item_name": "Pisces",
@@ -745,7 +812,8 @@
         "item_description": "Places totem that deals 21 damage (+13% Bonus) every 0.50 seconds for 6.00 seconds",
         "item_activation_cost": " 76 Mana",
         "item_cast_time": "Casttime: 0.50 sec",
-        "item_cooldown_time": "Cooldown: 9.60 sec"
+        "item_cooldown_time": "Cooldown: 9.60 sec",
+        "legacy": false
     },
     "Advanced Grave Boots": {
         "item_name": "Advanced Grave Boots",
@@ -759,7 +827,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Hercules": {
         "item_name": "Hercules",
@@ -767,7 +836,8 @@
         "item_description": "Hide in the shadows and receive 261 earth damage on your next attack.",
         "item_activation_cost": " 4 Energy",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 20.00 sec"
+        "item_cooldown_time": "Cooldown: 20.00 sec",
+        "legacy": false
     },
     "Dark Thunder": {
         "item_name": "Dark Thunder",
@@ -775,7 +845,8 @@
         "item_description": "31-58 Physical Damage (+100% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.49 sec",
-        "item_cooldown_time": "Cooldown: 2.97 sec"
+        "item_cooldown_time": "Cooldown: 2.97 sec",
+        "legacy": true
     },
     "Catarina's Staff": {
         "item_name": "Catarina's Staff",
@@ -783,7 +854,8 @@
         "item_description": "68-127 Death Damage (+100% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.89 sec",
-        "item_cooldown_time": "Cooldown: 5.05 sec"
+        "item_cooldown_time": "Cooldown: 5.05 sec",
+        "legacy": true
     },
     "Shabby Chest": {
         "item_name": "Shabby Chest",
@@ -797,7 +869,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Risato": {
         "item_name": "Risato",
@@ -805,7 +878,8 @@
         "item_description": "Throws a large fireball that deals 259-482 damage (+80% Bonus) to enemies",
         "item_activation_cost": " 36 Mana",
         "item_cast_time": "Casttime: 1.50 sec",
-        "item_cooldown_time": "Cooldown: 5.00 sec"
+        "item_cooldown_time": "Cooldown: 5.00 sec",
+        "legacy": false
     },
     "Risato_2": {
         "item_name": "Risato",
@@ -813,7 +887,8 @@
         "item_description": "Throws a large fireball that deals 261-484 damage (+80% Bonus) to enemies",
         "item_activation_cost": " 39 Mana",
         "item_cast_time": "Casttime: 1.50 sec",
-        "item_cooldown_time": "Cooldown: 5.00 sec"
+        "item_cooldown_time": "Cooldown: 5.00 sec",
+        "legacy": false
     },
     "Crafted Forsaken Ripper": {
         "item_name": "Crafted Forsaken Ripper",
@@ -821,7 +896,8 @@
         "item_description": "168-312 Fire Damage (+100% Bonus)",
         "item_activation_cost": " 76 Mana",
         "item_cast_time": "Casttime: 0.80 sec",
-        "item_cooldown_time": "Cooldown: 6.40 sec"
+        "item_cooldown_time": "Cooldown: 6.40 sec",
+        "legacy": true
     },
     "Sin": {
         "item_name": "Sin",
@@ -829,7 +905,8 @@
         "item_description": "228-423 Fire Damage (+100% Bonus). Heal yourself for 11-20 (+100% Bonus)",
         "item_activation_cost": " 99 Mana",
         "item_cast_time": "Casttime: 0.89 sec",
-        "item_cooldown_time": "Cooldown: 8.00 sec"
+        "item_cooldown_time": "Cooldown: 8.00 sec",
+        "legacy": true
     },
     "Night Break": {
         "item_name": "Night Break",
@@ -837,7 +914,8 @@
         "item_description": "Four short strikes in a row deal 25-46 damage (+38% bonus) per hitEnemies suffering from bleeding receive 100% bonus damage on the 4th strike",
         "item_activation_cost": " 14 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 7.20 sec"
+        "item_cooldown_time": "Cooldown: 7.20 sec",
+        "legacy": false
     },
     "Shabby Shoulders": {
         "item_name": "Shabby Shoulders",
@@ -851,7 +929,8 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Constellation Headguard": {
         "item_name": "Constellation Headguard",
@@ -865,7 +944,8 @@
         "item_mana": "+151 Mana",
         "item_mana_regen": "+2.5 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Isaac": {
         "item_name": "Isaac",
@@ -873,7 +953,8 @@
         "item_description": "Channels 174-323 Heal (+33% Bonus) every second",
         "item_activation_cost": " 195 Mana",
         "item_cast_time": "Casttime: 4.00 sec",
-        "item_cooldown_time": "Cooldown: 8.00 sec"
+        "item_cooldown_time": "Cooldown: 8.00 sec",
+        "legacy": false
     },
     "Sojiro": {
         "item_name": "Sojiro",
@@ -881,7 +962,8 @@
         "item_description": "Heal 170-317 (+80% Bonus)",
         "item_activation_cost": " 37 Mana",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 5.00 sec"
+        "item_cooldown_time": "Cooldown: 5.00 sec",
+        "legacy": false
     },
     "Dommik_2": {
         "item_name": "Dommik",
@@ -889,7 +971,8 @@
         "item_description": "Creates being which heals 107 (+25% Bonus) every 1.50 seconds for 12.00 seconds",
         "item_activation_cost": " 83 Mana",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 30.00 sec"
+        "item_cooldown_time": "Cooldown: 30.00 sec",
+        "legacy": false
     },
     "Colin_2": {
         "item_name": "Colin",
@@ -897,7 +980,8 @@
         "item_description": "Heal 47 (+10%% Bonus) every 2.00 sec for 20.00 secs. Receive +10.0 Mana Regeneration for 5.00 secs",
         "item_activation_cost": " 49 Mana",
         "item_cast_time": "Casttime: 0.99 sec",
-        "item_cooldown_time": "Cooldown: 50.36 sec"
+        "item_cooldown_time": "Cooldown: 50.36 sec",
+        "legacy": true
     },
     "Sirius_2": {
         "item_name": "Sirius",
@@ -905,7 +989,8 @@
         "item_description": "Heal 228-423 (+100% Bonus)",
         "item_activation_cost": " 98 Mana",
         "item_cast_time": "Casttime: 0.91 sec",
-        "item_cooldown_time": "Cooldown: 8.68 sec"
+        "item_cooldown_time": "Cooldown: 8.68 sec",
+        "legacy": true
     },
     "Santiago": {
         "item_name": "Santiago",
@@ -913,7 +998,8 @@
         "item_description": "Over 5.00 seconds deal 49 (+40% Bonus) damage every secondSlow the enemy by 71% for 1.80 seconds and 158% Threat",
         "item_activation_cost": " 10 Energy",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 30.00 sec"
+        "item_cooldown_time": "Cooldown: 30.00 sec",
+        "legacy": false
     },
     "Crafted The Light": {
         "item_name": "Crafted The Light",
@@ -921,7 +1007,8 @@
         "item_description": "126-233 Death Damage (+100% Bonus). Heal yourself for 7-14 (+100% Bonus)",
         "item_activation_cost": " 11 Energy",
         "item_cast_time": "Casttime: 0.48 sec",
-        "item_cooldown_time": "Cooldown: 4.80 sec"
+        "item_cooldown_time": "Cooldown: 4.80 sec",
+        "legacy": true
     },
     "Crafted Dualblade_2": {
         "item_name": "Crafted Dualblade",
@@ -929,7 +1016,8 @@
         "item_description": "Charge to the target position and deal 196-364 damage (+100% Bonus)",
         "item_activation_cost": " 6 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 20.00 sec"
+        "item_cooldown_time": "Cooldown: 20.00 sec",
+        "legacy": false
     },
     "Dragon_2": {
         "item_name": "Dragon",
@@ -937,7 +1025,8 @@
         "item_description": "Reckless Slam deals 70-130 damage (+65% Bonus)Enemies receive a bleed that deals 18 damage (+13% Bonus) per second over 5.00 seconds",
         "item_activation_cost": " 11 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 4.80 sec"
+        "item_cooldown_time": "Cooldown: 4.80 sec",
+        "legacy": false
     },
     "Vance": {
         "item_name": "Vance",
@@ -945,7 +1034,8 @@
         "item_description": "Receive +1.0 Energy Regeneration for 5.00 secs. 198-369 Death Damage (+100% Bonus)",
         "item_activation_cost": " 6 Energy",
         "item_cast_time": "Casttime: 0.71 sec",
-        "item_cooldown_time": "Cooldown: 30.00 sec"
+        "item_cooldown_time": "Cooldown: 30.00 sec",
+        "legacy": true
     },
     "Vance_2": {
         "item_name": "Vance",
@@ -953,7 +1043,8 @@
         "item_description": "Charge to the target position and deal 226-419 damage (+100% Bonus)",
         "item_activation_cost": " 6 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 20.00 sec"
+        "item_cooldown_time": "Cooldown: 20.00 sec",
+        "legacy": false
     },
     "Sanji": {
         "item_name": "Sanji",
@@ -961,7 +1052,8 @@
         "item_description": "A heavy Strike that deals 114-211 damage (+80% bonus)",
         "item_activation_cost": " 6 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 3.00 sec"
+        "item_cooldown_time": "Cooldown: 3.00 sec",
+        "legacy": false
     },
     "Asa_2": {
         "item_name": "Asa",
@@ -969,7 +1061,8 @@
         "item_description": "Distract an enemy and deal 63-118 damage (+150% Bonus) and 237% Threat",
         "item_activation_cost": " 10 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 6.00 sec"
+        "item_cooldown_time": "Cooldown: 6.00 sec",
+        "legacy": false
     },
     "Crafted Battle Axe": {
         "item_name": "Crafted Battle Axe",
@@ -977,7 +1070,8 @@
         "item_description": "100-187 Death Damage (+100% Bonus)",
         "item_activation_cost": " 9 Energy",
         "item_cast_time": "Casttime: 0.48 sec",
-        "item_cooldown_time": "Cooldown: 3.84 sec"
+        "item_cooldown_time": "Cooldown: 3.84 sec",
+        "legacy": true
     },
     "Nicu_2": {
         "item_name": "Nicu",
@@ -985,7 +1079,8 @@
         "item_description": "Receive +1.0 Energy Regeneration for 5.00 secs. 100-187 Physical Damage (+100% Bonus)",
         "item_activation_cost": " 5 Energy",
         "item_cast_time": "Casttime: 0.71 sec",
-        "item_cooldown_time": "Cooldown: 28.90 sec"
+        "item_cooldown_time": "Cooldown: 28.90 sec",
+        "legacy": true
     },
     "Strongblade of Valor": {
         "item_name": "Strongblade of Valor",
@@ -993,7 +1088,8 @@
         "item_description": "Taunt the enemies infront of you and does 63-116 damage (+100% Bonus) and 493% Threat.",
         "item_activation_cost": " 9 Energy",
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 40.00 sec"
+        "item_cooldown_time": "Cooldown: 40.00 sec",
+        "legacy": false
     },
     "Glynphyra's Mystery": {
         "item_name": "Glynphyra's Mystery",
@@ -1001,7 +1097,8 @@
         "item_description": "25-48 Water Damage (+40% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 1.01 sec",
-        "item_cooldown_time": "Cooldown: 26.18 sec"
+        "item_cooldown_time": "Cooldown: 26.18 sec",
+        "legacy": true
     },
     "Whisper of Titans": {
         "item_name": "Whisper of Titans",
@@ -1009,7 +1106,8 @@
         "item_description": "51-94 Water Damage (+100% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.84 sec",
-        "item_cooldown_time": "Cooldown: 4.86 sec"
+        "item_cooldown_time": "Cooldown: 4.86 sec",
+        "legacy": true
     },
     "Flame Ridden Helmet": {
         "item_name": "Flame Ridden Helmet",
@@ -1023,7 +1121,8 @@
         "item_mana": "+98 Mana",
         "item_mana_regen": "+1.8 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Sojiro_2": {
         "item_name": "Sojiro",
@@ -1031,7 +1130,8 @@
         "item_description": "Heal 168-313 (+80% Bonus)",
         "item_activation_cost": " 36 Mana",
         "item_cast_time": "Casttime: 1.00 sec",
-        "item_cooldown_time": "Cooldown: 5.00 sec"
+        "item_cooldown_time": "Cooldown: 5.00 sec",
+        "legacy": false
     },
     "Flame Ridden Shoulders": {
         "item_name": "Flame Ridden Shoulders",
@@ -1045,7 +1145,8 @@
         "item_mana": "+103 Mana",
         "item_mana_regen": "+1.8 Mana Regeneration",
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     },
     "Flatbow": {
         "item_name": "Flatbow",
@@ -1053,7 +1154,8 @@
         "item_description": "2-3 Physical Damage (+100% Bonus)",
         "item_activation_cost": null,
         "item_cast_time": "Casttime: 0.60 sec",
-        "item_cooldown_time": "Cooldown: 1.50 sec"
+        "item_cooldown_time": "Cooldown: 1.50 sec",
+        "legacy": true
     },
     "Shabby Hat": {
         "item_name": "Shabby Hat",
@@ -1067,6 +1169,7 @@
         "item_mana": null,
         "item_mana_regen": null,
         "item_life_regen": null,
-        "item_energy_regen": null
+        "item_energy_regen": null,
+        "legacy": null
     }
 }
