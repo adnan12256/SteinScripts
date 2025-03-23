@@ -211,7 +211,7 @@ class SteinLootAppraiser:
         return drop_item_info
 
     def compare_loot_with_inventory(self, inventory_info: dict[str, WeaponItem | ArmorItem], dropped_items_dict: dict):
-        # dropped_items_dict = {'Risato': WeaponItem(item_name='Risato', item_type='Fireball', item_description='Throws a large fireball that deals 259-482 damage (+80% Bonus) to enemies', item_activation_cost=' 36 Mana', item_cast_time='Casttime: 1.50 sec', item_cooldown_time='Cooldown: 5.00 sec')}
+        dropped_items_dict = {"Catarina's Demise": WeaponItem(item_name="Catarina's Demise", item_type='Void Hex', item_description='The Void Hex damages the hit enemies over 5.00 seconds for 40 damage (+26% Bonus) per secondand gives you 2 Corruption while Inflicting 32 damage (+10% Bonus) to yourself.', item_activation_cost=' 30 Mana', item_cast_time='Casttime: 0.80 sec', item_cooldown_time='Cooldown: 4.00 sec')}
         for item_name, stats in dropped_items_dict.items():
             inventory_item_match = [key for key in inventory_info.keys() if key.startswith(item_name)]
             if len(inventory_item_match) > 0:
@@ -221,22 +221,45 @@ class SteinLootAppraiser:
                     drop_description = stats.item_description
 
                     try:
-                        inv_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", inv_description)
-                        if inv_get_match is None:
-                            continue
-                        inv_lower_damage = int(inv_get_match.group(1))
-                        inv_higher_damage = int(inv_get_match.group(2))
+                        match stats.item_type:
+                            case "Void Hex":
+                                inv_get_match = re.findall(r"(\d+) damage", inv_description)
+                                drop_get_match = re.findall(r"(\d+) damage", drop_description)
+                                if inv_get_match is None or drop_get_match is None:
+                                    continue
 
-                        drop_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", drop_description)
-                        if drop_get_match is None:
-                            continue
-                        drop_lower_damage = int(drop_get_match.group(1))
-                        drop_higher_damage = int(drop_get_match.group(2))
+                                inv_damage_done = int(inv_get_match[0])
+                                inv_damage_inflict = int(inv_get_match[1])
+                                drop_damage_done = int(drop_get_match[0])
+                                drop_damage_inflict = int(drop_get_match[1])
 
-                        if ((drop_lower_damage + drop_higher_damage) / 2) > ((inv_lower_damage + inv_higher_damage) / 2):
-                            print("This is an upgrade")
-                        else:
-                            print("This is not an upgrade")
+                                if drop_damage_done > inv_damage_done:
+                                    if drop_damage_inflict < inv_damage_inflict or drop_damage_inflict == inv_damage_inflict:
+                                        print("This is an upgrade")
+                                    else:
+                                        print("This is an Upgrade but it inflicts for damage than inv item")
+                                else:
+                                    if drop_damage_inflict < inv_damage_inflict:
+                                        print("This is not an upgrade but it inflicts less damage than inv item")
+                                    else:
+                                        print("This is not an upgrade")
+
+                            case _:
+                                inv_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", inv_description)
+                                drop_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", drop_description)
+                                if inv_get_match is None or drop_get_match is None:
+                                    continue
+
+                                inv_lower_damage = int(inv_get_match.group(1))
+                                inv_higher_damage = int(inv_get_match.group(2))
+                                drop_lower_damage = int(drop_get_match.group(1))
+                                drop_higher_damage = int(drop_get_match.group(2))
+
+                                if ((drop_lower_damage + drop_higher_damage) / 2) > (
+                                        (inv_lower_damage + inv_higher_damage) / 2):
+                                    print("This is an upgrade")
+                                else:
+                                    print("This is not an upgrade")
 
                     except Exception as err:
                         print(str(err))
