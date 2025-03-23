@@ -220,6 +220,7 @@ class SteinLootAppraiser:
                     if isinstance(stats, WeaponItem):
                         self.loot_analysis_weaoon(inventory_info[inventory_item], stats)
                     if isinstance(stats, ArmorItem):
+                        # TODO: Add function here for analyzing the armor drops
                         pass
             else:
                 print("This is a new Item!")
