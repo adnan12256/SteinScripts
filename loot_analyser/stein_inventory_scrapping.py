@@ -212,7 +212,7 @@ class SteinLootAppraiser:
         return drop_item_info
 
     def compare_loot_with_inventory(self, inventory_info: dict[str, WeaponItem | ArmorItem], dropped_items_dict: dict[str, WeaponItem | ArmorItem]):
-        dropped_items_dict = {'Dragon': WeaponItem(item_name='Dragon', item_type='Reckless Slam', item_description='Reckless Slam deals 61-110 damage (+65% Bonus)Enemies receive a bleed that deals 19 damage (+13% Bonus) per second over 5.00 seconds', item_activation_cost=' 10 Energy', item_cast_time='Casttime: 0.60 sec', item_cooldown_time='Cooldown: 4.80 sec')}
+        dropped_items_dict = {'Aries': WeaponItem(item_name='Aries', item_type='Waterfall', item_description='Deals 185-344 damage (+65% Bonus) forwardsand 168-313 damage (+85% Bonus) backwards', item_activation_cost=' 56 Mana', item_cast_time='Casttime: 0.80 sec', item_cooldown_time='Cooldown: 6.40 sec')}
         for item_name, stats in dropped_items_dict.items():
             inventory_item_match = [key for key in inventory_info.keys() if key.startswith(item_name)]
             if len(inventory_item_match) > 0:
@@ -272,6 +272,30 @@ class SteinLootAppraiser:
                     drop_average = statistics.mean([drop_range_damage_lower, drop_range_damage_higher])
 
                     if (drop_average + drop_bleed_damage * 5) > (inv_average + inv_bleed_damage * 5):
+                        print("This is an upgrade")
+                    else:
+                        print("This is not an upgrade")
+
+                case "Waterfall":
+                    inv_range_damage = re.findall(r"(\d+)-(\d+) damage", inv_description)
+                    drop_range_damage = re.findall(r"(\d+)-(\d+) damage", drop_description)
+
+                    if None in [inv_range_damage, drop_range_damage]:
+                        return
+
+                    inv_front_damage = inv_range_damage[0]
+                    inv_front_damage_avg = statistics.mean([int(num) for num in inv_front_damage]) * 0.65
+                    inv_back_damage = inv_range_damage[1]
+                    inv_back_damage_avg = statistics.mean([int(num) for num in inv_back_damage]) * 0.85
+                    inv_avg_damage = inv_front_damage_avg + inv_back_damage_avg
+
+                    drop_front_damage = drop_range_damage[0]
+                    drop_front_damage_avg = statistics.mean([int(num) for num in drop_front_damage]) * 0.65
+                    drop_back_damage = drop_range_damage[1]
+                    drop_back_damage_avg = statistics.mean([int(num) for num in drop_back_damage]) * 0.85
+                    drop_avg_damage = drop_front_damage_avg + drop_back_damage_avg
+
+                    if drop_avg_damage > inv_avg_damage:
                         print("This is an upgrade")
                     else:
                         print("This is not an upgrade")
