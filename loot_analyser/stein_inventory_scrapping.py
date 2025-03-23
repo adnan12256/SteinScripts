@@ -225,7 +225,7 @@ class SteinLootAppraiser:
                     if isinstance(stats, WeaponItem):
                         if inventory_info[inventory_item].legacy:
                             print("Unable to compare item with legacy version")
-                            return
+                            continue
                         self.loot_analysis_weaoon(inventory_info[inventory_item], stats)
                     if isinstance(stats, ArmorItem):
                         # TODO: Add function here for analyzing the armor drops
