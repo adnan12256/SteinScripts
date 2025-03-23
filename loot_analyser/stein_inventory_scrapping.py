@@ -210,62 +210,89 @@ class SteinLootAppraiser:
 
         return drop_item_info
 
-    def compare_loot_with_inventory(self, inventory_info: dict[str, WeaponItem | ArmorItem], dropped_items_dict: dict):
+    def compare_loot_with_inventory(self, inventory_info: dict[str, WeaponItem | ArmorItem], dropped_items_dict: dict[str, WeaponItem | ArmorItem]):
         dropped_items_dict = {"Catarina's Demise": WeaponItem(item_name="Catarina's Demise", item_type='Void Hex', item_description='The Void Hex damages the hit enemies over 5.00 seconds for 40 damage (+26% Bonus) per secondand gives you 2 Corruption while Inflicting 32 damage (+10% Bonus) to yourself.', item_activation_cost=' 30 Mana', item_cast_time='Casttime: 0.80 sec', item_cooldown_time='Cooldown: 4.00 sec')}
         for item_name, stats in dropped_items_dict.items():
             inventory_item_match = [key for key in inventory_info.keys() if key.startswith(item_name)]
             if len(inventory_item_match) > 0:
                 print("Item exists in the inventory")
                 for inventory_item in inventory_item_match:
-                    inv_description = inventory_info[inventory_item].item_description
-                    drop_description = stats.item_description
-
-                    try:
-                        match stats.item_type:
-                            case "Void Hex":
-                                inv_get_match = re.findall(r"(\d+) damage", inv_description)
-                                drop_get_match = re.findall(r"(\d+) damage", drop_description)
-                                if inv_get_match is None or drop_get_match is None:
-                                    continue
-
-                                inv_damage_done = int(inv_get_match[0])
-                                inv_damage_inflict = int(inv_get_match[1])
-                                drop_damage_done = int(drop_get_match[0])
-                                drop_damage_inflict = int(drop_get_match[1])
-
-                                if drop_damage_done > inv_damage_done:
-                                    if drop_damage_inflict < inv_damage_inflict or drop_damage_inflict == inv_damage_inflict:
-                                        print("This is an upgrade")
-                                    else:
-                                        print("This is an Upgrade but it inflicts for damage than inv item")
-                                else:
-                                    if drop_damage_inflict < inv_damage_inflict:
-                                        print("This is not an upgrade but it inflicts less damage than inv item")
-                                    else:
-                                        print("This is not an upgrade")
-
-                            case _:
-                                inv_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", inv_description)
-                                drop_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", drop_description)
-                                if inv_get_match is None or drop_get_match is None:
-                                    continue
-
-                                inv_lower_damage = int(inv_get_match.group(1))
-                                inv_higher_damage = int(inv_get_match.group(2))
-                                drop_lower_damage = int(drop_get_match.group(1))
-                                drop_higher_damage = int(drop_get_match.group(2))
-
-                                if ((drop_lower_damage + drop_higher_damage) / 2) > (
-                                        (inv_lower_damage + inv_higher_damage) / 2):
-                                    print("This is an upgrade")
-                                else:
-                                    print("This is not an upgrade")
-
-                    except Exception as err:
-                        print(str(err))
-
+                    if isinstance(stats, WeaponItem):
+                        self.loot_analysis_weaoon(inventory_info[inventory_item], stats)
+                    if isinstance(stats, ArmorItem):
+                        pass
             else:
                 print("This is a new Item!")
+
+    @staticmethod
+    def loot_analysis_weaoon(inv_item: WeaponItem, drop_item: WeaponItem):
+        inv_description = inv_item.item_description
+        drop_description = drop_item.item_description
+        try:
+            match inv_item.item_type:
+                case "Void Hex":
+                    inv_get_match = re.findall(r"(\d+) damage", inv_description)
+                    drop_get_match = re.findall(r"(\d+) damage", drop_description)
+                    if inv_get_match is None or drop_get_match is None:
+                        return
+
+                    inv_damage_done = int(inv_get_match[0])
+                    inv_damage_inflict = int(inv_get_match[1])
+                    drop_damage_done = int(drop_get_match[0])
+                    drop_damage_inflict = int(drop_get_match[1])
+
+                    if drop_damage_done > inv_damage_done:
+                        if drop_damage_inflict < inv_damage_inflict or drop_damage_inflict == inv_damage_inflict:
+                            print("This is an upgrade")
+                        else:
+                            print("This is an Upgrade but it inflicts for damage than inv item")
+                    else:
+                        if drop_damage_inflict < inv_damage_inflict:
+                            print("This is not an upgrade but it inflicts less damage than inv item")
+                        else:
+                            print("This is not an upgrade")
+
+                case "Dragon":
+                    inv_get_match = re.findall(r"(\d+) damage", inv_description)
+                    drop_get_match = re.findall(r"(\d+) damage", drop_description)
+                    if inv_get_match is None or drop_get_match is None:
+                        return
+
+                    inv_damage_done = int(inv_get_match[0])
+                    inv_damage_inflict = int(inv_get_match[1])
+                    drop_damage_done = int(drop_get_match[0])
+                    drop_damage_inflict = int(drop_get_match[1])
+
+                    if drop_damage_done > inv_damage_done:
+                        if drop_damage_inflict < inv_damage_inflict or drop_damage_inflict == inv_damage_inflict:
+                            print("This is an upgrade")
+                        else:
+                            print("This is an Upgrade but it inflicts for damage than inv item")
+                    else:
+                        if drop_damage_inflict < inv_damage_inflict:
+                            print("This is not an upgrade but it inflicts less damage than inv item")
+                        else:
+                            print("This is not an upgrade")
+
+                case _:
+                    inv_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", inv_description)
+                    drop_get_match = re.search(r"(\d+)-(\d+) (?:\w+ )?damage", drop_description)
+                    if inv_get_match is None or drop_get_match is None:
+                        return
+
+                    inv_lower_damage = int(inv_get_match.group(1))
+                    inv_higher_damage = int(inv_get_match.group(2))
+                    drop_lower_damage = int(drop_get_match.group(1))
+                    drop_higher_damage = int(drop_get_match.group(2))
+
+                    if ((drop_lower_damage + drop_higher_damage) / 2) > (
+                            (inv_lower_damage + inv_higher_damage) / 2):
+                        print("This is an upgrade")
+                    else:
+                        print("This is not an upgrade")
+
+        except Exception as err:
+            print(str(err))
 
 
 if __name__ == '__main__':
