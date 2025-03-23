@@ -33,6 +33,7 @@ class ArmorItem:
     item_mana_regen: str = None
     item_life_regen: str = None
     item_energy_regen: str = None
+    legacy: bool = None
 
 
 @dataclass
@@ -43,6 +44,7 @@ class WeaponItem:
     item_activation_cost: Coroutine[Any, Any, str] | None
     item_cast_time: Coroutine[Any, Any, str]
     item_cooldown_time: Coroutine[Any, Any, str]
+    legacy: bool
 
 
 class SteinLootAppraiser:
@@ -150,14 +152,16 @@ class SteinLootAppraiser:
                                        item_description=full_description,
                                        item_activation_cost=None,
                                        item_cast_time=self.page.locator("div#stein-tooltip div.stein-tooltip-item-casttime").inner_text(),
-                                       item_cooldown_time=self.page.locator("div#stein-tooltip div.stein-tooltip-item-cooldown").inner_text())
+                                       item_cooldown_time=self.page.locator("div#stein-tooltip div.stein-tooltip-item-cooldown").inner_text(),
+                                       legacy='"Legacy of Waldenbach"' in self.page.locator("div#stein-tooltip div").all_inner_texts())
             else:
                 item_data = WeaponItem(item_name=item_name,
                                        item_type=item_type,
                                        item_description=full_description,
                                        item_activation_cost=self.page.locator("div#stein-tooltip div.stein-tooltip-item-activation-cost").inner_text(),
                                        item_cast_time=self.page.locator("div#stein-tooltip div.stein-tooltip-item-casttime").inner_text(),
-                                       item_cooldown_time=self.page.locator("div#stein-tooltip div.stein-tooltip-item-cooldown").inner_text())
+                                       item_cooldown_time=self.page.locator("div#stein-tooltip div.stein-tooltip-item-cooldown").inner_text(),
+                                       legacy='"Legacy of Waldenbach"' in self.page.locator("div#stein-tooltip div").all_inner_texts())
 
         return item_data
 
@@ -219,6 +223,9 @@ class SteinLootAppraiser:
                 print("Item exists in the inventory")
                 for inventory_item in inventory_item_match:
                     if isinstance(stats, WeaponItem):
+                        if inventory_info[inventory_item].legacy:
+                            print("Unable to compare item with legacy version")
+                            return
                         self.loot_analysis_weaoon(inventory_info[inventory_item], stats)
                     if isinstance(stats, ArmorItem):
                         # TODO: Add function here for analyzing the armor drops
@@ -235,7 +242,8 @@ class SteinLootAppraiser:
                 case "Void Hex":
                     inv_get_match = re.findall(r"(\d+) damage", inv_description)
                     drop_get_match = re.findall(r"(\d+) damage", drop_description)
-                    if inv_get_match is None or drop_get_match is None:
+
+                    if None in [drop_get_match, inv_get_match]:
                         return
 
                     inv_damage_done = int(inv_get_match[0])
