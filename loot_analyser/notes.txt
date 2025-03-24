@@ -1,0 +1,23 @@
+Things to make analysis logic for:
+"Catarina's Demise":
+"The Void Hex damages the hit enemies over 5.00 seconds for 81 damage (+26% Bonus) per second and gives you 2 Corruption while Inflicting 41 damage (+10% Bonus) to yourself."
+"Centaurus":
+"Gives yourself a shield for 5.00 seconds against the next attack which throws back up to 382 Damage (+100% Bonus) to your enemy."
+"Opus":
+"Poisons the hit enemies for 6.00 seconds and deals 56 damage (+26% Bonus) per second Each enemy is marked with hunter's mark for 5.00 seconds"
+"Colin":
+"Gives every ally hit a shield up to 487 (+100% Bonus) for 20.00 seconds. Shield amount gets divided between the allies hit."
+"Orion":
+"Places totem that deals 85 damage (+13% Bonus) every second and reduces movement speed by 56% for 4.00 seconds"
+"Sirius":
+"Gives heal buff for 5.00 seconds which heals 113 (+30% Bonus) every second"
+"Havoc":
+"Receive +161 Soul Damage for 4.00 secs. Receive 154 Soul Damage. Restores 140 Mana"
+"Pisces":
+"Places totem that deals 21 damage (+13% Bonus) every 0.50 seconds for 6.00 seconds"
+"Hercules":
+"Hide in the shadows and receive 261 earth damage on your next attack."
+"Dommik_2":
+"Creates being which heals 107 (+25% Bonus) every 1.50 seconds for 12.00 seconds"
+"Santiago":
+"Over 5.00 seconds deal 49 (+40% Bonus) damage every second Slow the enemy by 71% for 1.80 seconds and 158% Threat"
