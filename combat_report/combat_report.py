@@ -64,10 +64,10 @@ class CombatReporter:
         self._fight_metadata: Metadata = fight_log.metadata
         self._fight_events: list[Event] = fight_log.events
 
-        # Setting up events df and adding time_sec col
+        # Setting up events df and adding Time (s) col
         self._events_df = pd.DataFrame(data["events"])
         start_time = self._fight_metadata.startTime
-        self._events_df["time_sec"] = (self._events_df["timestamp"] - start_time) / 1000
+        self._events_df["Time (s)"] = (self._events_df["timestamp"] - start_time) / 1000
 
         self._setup_metrics()
 
@@ -165,13 +165,13 @@ class CombatReporter:
         self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
 
     def _plot_hp_over_time_in_combat(self):
-        fig = px.line(self._events_df, x="time_sec", y=[event.resources.HP for event in self._fight_events], color="defender", title="HP Over Time")
+        fig = px.line(self._events_df, x="Time (s)", y=[event.resources.HP for event in self._fight_events], color="defender", title="HP Over Time in Combat", labels={"y": "HP"})
         fig.show()
 
     def _plot_damage_over_time_in_combat(self):
         self._events_df["Damage"] = [event.value if event.effectType == "Damage" else 0 for event in self._fight_events]
         self._events_df["Running Total Damage"] = self._events_df.groupby("attacker")["Damage"].cumsum()
-        fig = px.line(self._events_df, x="time_sec", y="Running Total Damage", color="attacker", title="Running Total Damage in Combat")
+        fig = px.line(self._events_df, x="Time (s)", y="Running Total Damage", color="attacker", title="Running Total Damage in Combat")
         fig.show()
 
 
