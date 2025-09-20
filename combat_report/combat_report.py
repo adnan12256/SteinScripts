@@ -1,5 +1,4 @@
 # TODO LIST
-# Overheal mapping
 # Duration tank was fully healed
 # Make dps graph
 # How many times players had near death events (Defined by %HP drops)
@@ -59,6 +58,7 @@ class CombatReporter:
         self.player_hps_in_combat: dict[str, float] = {}
         self.player_dps_in_combat: dict[str, float] = {}
         self.player_overheal_in_combat: dict[str, float] = {}
+        self.player_current_hp_in_combat: dict[str, float] = {}
 
         self._fight_metadata: Metadata = fight_log.metadata
         self._fight_events: list[Event] = fight_log.events
@@ -125,17 +125,25 @@ class CombatReporter:
         self.player_hps_in_combat = dict(sorted(self.player_hps_in_combat.items(), key=lambda item: item[1], reverse=True))
 
     def _set_overheal_in_combat(self, event: Event):
-        # TODO: Not correct logic. current HP is not acquired from event.resources.HP
-        # if event.effectType == "Heal":
-        #     if event.attacker not in self.player_overheal_in_combat:
-        #         if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
-        #             self.player_overheal_in_combat[event.attacker] = over_heal
-        #     else:
-        #         if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
-        #             self.player_overheal_in_combat[event.attacker] += over_heal
-        #
-        # self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
-        ...
+        if event.effectType == "Heal":
+            # First heal in combat
+            if event.defender not in self.player_current_hp_in_combat:
+                self.player_current_hp_in_combat[event.defender] = event.resources.HPmax
+                self.player_overheal_in_combat[event.attacker] = event.value
+                return
+            # Any heal done on player after they already have their initial hp in the current hp map
+            if (over_heal := event.value - (event.resources.HPmax - self.player_current_hp_in_combat[event.defender])) > 0:
+                self.player_overheal_in_combat[event.attacker] = over_heal
+
+            # Updates current hp value after heal incase it wasnt overhealed
+            self.player_current_hp_in_combat[event.defender] = event.resources.HP
+
+        if event.effectType == "Damage":
+            # Updates player hp whenever its attacked
+            self.player_current_hp_in_combat[event.defender] = event.resources.HP
+
+        self.player_current_hp_in_combat = dict(sorted(self.player_current_hp_in_combat.items(), key=lambda item: item[1], reverse=True))
+        self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
 
 
 if __name__ == '__main__':
@@ -154,3 +162,4 @@ if __name__ == '__main__':
     print(f"Total Heal Map = {report.player_total_heal_in_combat}")
     print(f"HPS Map = {report.player_hps_in_combat}")
     print(f"Over Heal Map = {report.player_overheal_in_combat}")
+    print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
