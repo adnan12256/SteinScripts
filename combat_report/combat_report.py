@@ -1,7 +1,6 @@
 # TODO LIST
 # Duration tank was fully healed
 # How many times players had near death events (Defined by %HP drops)
-import argparse
 from pathlib import Path
 from typing import List, Optional
 from pydantic import BaseModel
