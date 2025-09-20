@@ -1,5 +1,4 @@
 # TODO LIST
-# Total Damage Taken
 # Duration tank was fully healed
 # Make dps graph
 # How many times players had near death events (Defined by %HP drops)
@@ -8,6 +7,8 @@ from pathlib import Path
 from typing import List, Optional
 from pydantic import BaseModel
 import json
+import pandas as pd
+import plotly.express as px
 
 
 class Metadata(BaseModel):
@@ -62,6 +63,7 @@ class CombatReporter:
         self.player_current_hp_in_combat: dict[str, float] = {}
         self.player_total_damage_taken_in_combat: dict[str, float] = {}
 
+        self._events_df = pd.DataFrame(data["events"])
         self._fight_metadata: Metadata = fight_log.metadata
         self._fight_events: list[Event] = fight_log.events
         self._setup_metrics()
@@ -77,6 +79,7 @@ class CombatReporter:
 
         self._set_dps_in_combat()
         self._set_hps_in_combat()
+        self._plot_hp_over_time_in_combat()
 
     def _set_highest_damage_in_combat(self, event: Event):
         if event.effectType == "Damage":
@@ -156,6 +159,13 @@ class CombatReporter:
 
         self.player_current_hp_in_combat = dict(sorted(self.player_current_hp_in_combat.items(), key=lambda item: item[1], reverse=True))
         self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
+
+    def _plot_hp_over_time_in_combat(self):
+        start_time = self._fight_metadata.startTime
+        self._events_df["time_sec"] = (self._events_df["timestamp"] - start_time) / 1000
+        self._events_df["HP"] = [event.resources.HP for event in self._fight_events]
+        fig = px.line(self._events_df, x="time_sec", y="HP", color="defender", title="HP Over Time")
+        fig.show()
 
 
 if __name__ == '__main__':
