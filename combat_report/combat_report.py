@@ -1,7 +1,7 @@
 # TODO LIST
 # Duration tank was fully healed
 # How many times players had near death events (Defined by %HP drops)
-
+import argparse
 from pathlib import Path
 from typing import List, Optional
 from pydantic import BaseModel
@@ -46,7 +46,7 @@ class FightLog(BaseModel):
 
 
 class CombatReporter:
-    def __init__(self, fight_log_json: Path = Path("fight-log.json")):
+    def __init__(self, fight_log_json: Path):
         with open(fight_log_json) as f:
             data = json.load(f)
 
@@ -177,7 +177,16 @@ class CombatReporter:
 
 
 if __name__ == '__main__':
-    report = CombatReporter()
+    json_file_location: str | Path = input("Enter Path to the fight log json file: ")
+    if not json_file_location:
+        json_file_location: Path = Path("fight-log.json")
+
+    if not json_file_location.is_file() or not json_file_location.suffix == ".json":
+        print(f"Invalid file: {json_file_location}")
+        input("Press Enter to exit...")
+        exit()
+
+    report = CombatReporter(Path(json_file_location))
     print("COMBAT REPORT")
     print("```````````````````````````````````````````````````````````````````````````````````````````````````````````")
     print("Damage Metrics")
@@ -194,3 +203,7 @@ if __name__ == '__main__':
     print(f"HPS Map = {report.player_hps_in_combat}")
     print(f"Over Heal Map = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
+
+    print("\n")
+    print("```````````````````````````````````````````````````````````````````````````````````````````````````````````")
+    input("Press Enter to exit...")
