@@ -76,6 +76,8 @@ class CombatReporter:
             if self.player_highest_damage_in_combat[event.attacker] < event.value:
                 self.player_highest_damage_in_combat[event.attacker] = event.value
 
+            dict(sorted(self.player_highest_damage_in_combat.items(), key=lambda item: item[1]))
+
     def _set_highest_heal_in_combat(self, event: Event):
         if event.effectType == "Heal":
             if event.attacker not in self.player_highest_heal_in_combat:
@@ -84,12 +86,16 @@ class CombatReporter:
             if self.player_highest_heal_in_combat[event.attacker] < event.value:
                 self.player_highest_heal_in_combat[event.attacker] = event.value
 
+        dict(sorted(self.player_highest_heal_in_combat.items(), key=lambda item: item[1]))
+
     def _set_total_damage_in_combat(self, event: Event):
         if event.effectType == "Damage":
             if event.attacker not in self.player_total_damage_in_combat:
                 self.player_total_damage_in_combat[event.attacker] = event.value
 
             self.player_total_damage_in_combat[event.attacker] += event.value
+
+        dict(sorted(self.player_total_damage_in_combat.items(), key=lambda item: item[1]))
 
     def _set_total_heal_in_combat(self, event: Event):
         if event.effectType == "Heal":
@@ -98,15 +104,34 @@ class CombatReporter:
 
             self.player_total_heal_in_combat[event.attacker] += event.value
 
+        dict(sorted(self.player_total_heal_in_combat.items(), key=lambda item: item[1]))
+
     def _set_dps_in_combat(self):
         if self.player_total_damage_in_combat:
             self.player_dps_in_combat = {name: total_damage / self._fight_metadata.durationSec for name, total_damage in self.player_total_damage_in_combat.items()}
+
+        dict(sorted(self.player_dps_in_combat.items(), key=lambda item: item[1]))
 
     def _set_hps_in_combat(self):
         if self.player_total_heal_in_combat:
             self.player_hps_in_combat = {name: total_heal / self._fight_metadata.durationSec for name, total_heal in self.player_total_heal_in_combat.items()}
 
+        dict(sorted(self.player_hps_in_combat.items(), key=lambda item: item[1]))
+
 
 if __name__ == '__main__':
     report = CombatReporter()
-    a = 1
+    print("COMBAT REPORT")
+    print("\n")
+    print("Damage")
+    print(f"Highest Damage Map = {report.player_highest_damage_in_combat}")
+    print(f"Total Damage Map = {report.player_total_damage_in_combat}")
+    print(f"DPS Map = {report.player_dps_in_combat}")
+
+    print("\n")
+    print("Heal")
+    print(f"Highest Heal Map = {report.player_highest_heal_in_combat}")
+    print(f"Total Heal Map = {report.player_total_heal_in_combat}")
+    print(f"HPS Map = {report.player_hps_in_combat}")
+
+
