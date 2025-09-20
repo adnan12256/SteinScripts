@@ -1,4 +1,5 @@
 # TODO LIST
+# Total Damage Taken
 # Duration tank was fully healed
 # Make dps graph
 # How many times players had near death events (Defined by %HP drops)
@@ -59,6 +60,7 @@ class CombatReporter:
         self.player_dps_in_combat: dict[str, float] = {}
         self.player_overheal_in_combat: dict[str, float] = {}
         self.player_current_hp_in_combat: dict[str, float] = {}
+        self.player_total_damage_taken_in_combat: dict[str, float] = {}
 
         self._fight_metadata: Metadata = fight_log.metadata
         self._fight_events: list[Event] = fight_log.events
@@ -69,6 +71,7 @@ class CombatReporter:
             self._set_highest_damage_in_combat(event)
             self._set_highest_heal_in_combat(event)
             self._set_total_damage_in_combat(event)
+            self._set_total_damage_taken_in_combat(event)
             self._set_total_heal_in_combat(event)
             self._set_overheal_in_combat(event)
 
@@ -102,6 +105,15 @@ class CombatReporter:
                 self.player_total_damage_in_combat[event.attacker] += event.value
 
         self.player_total_damage_in_combat = dict(sorted(self.player_total_damage_in_combat.items(), key=lambda item: item[1], reverse=True))
+
+    def _set_total_damage_taken_in_combat(self, event: Event):
+        if event.effectType == "Damage":
+            if event.defender not in self.player_total_damage_taken_in_combat:
+                self.player_total_damage_taken_in_combat[event.defender] = event.value
+            else:
+                self.player_total_damage_taken_in_combat[event.defender] += event.value
+
+        self.player_total_damage_taken_in_combat = dict(sorted(self.player_total_damage_taken_in_combat.items(), key=lambda item: item[1], reverse=True))
 
     def _set_total_heal_in_combat(self, event: Event):
         if event.effectType == "Heal":
@@ -153,6 +165,7 @@ if __name__ == '__main__':
     print("Damage Metrics")
     print(f"Highest Damage Map = {report.player_highest_damage_in_combat}")
     print(f"Total Damage Map = {report.player_total_damage_in_combat}")
+    print(f"Total Damage Taken Map = {report.player_total_damage_taken_in_combat}")
     print(f"DPS Map = {report.player_dps_in_combat}")
 
     print("\n")
