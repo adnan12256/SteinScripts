@@ -1,3 +1,8 @@
+# TODO LIST
+# Overheal mapping
+# Duration tank was fully healed
+# Make dps graph
+
 from pathlib import Path
 from typing import List, Optional
 from pydantic import BaseModel
@@ -52,6 +57,7 @@ class CombatReporter:
         self.player_highest_damage_in_combat: dict[str, float] = {}
         self.player_hps_in_combat: dict[str, float] = {}
         self.player_dps_in_combat: dict[str, float] = {}
+        self.player_overheal_in_combat: dict[str, float] = {}
 
         self._fight_metadata: Metadata = fight_log.metadata
         self._fight_events: list[Event] = fight_log.events
@@ -63,6 +69,7 @@ class CombatReporter:
             self._set_highest_heal_in_combat(event)
             self._set_total_damage_in_combat(event)
             self._set_total_heal_in_combat(event)
+            self._set_overheal_in_combat(event)
 
         self._set_dps_in_combat()
         self._set_hps_in_combat()
@@ -90,8 +97,8 @@ class CombatReporter:
         if event.effectType == "Damage":
             if event.attacker not in self.player_total_damage_in_combat:
                 self.player_total_damage_in_combat[event.attacker] = event.value
-
-            self.player_total_damage_in_combat[event.attacker] += event.value
+            else:
+                self.player_total_damage_in_combat[event.attacker] += event.value
 
         self.player_total_damage_in_combat = dict(sorted(self.player_total_damage_in_combat.items(), key=lambda item: item[1], reverse=True))
 
@@ -99,8 +106,8 @@ class CombatReporter:
         if event.effectType == "Heal":
             if event.attacker not in self.player_total_heal_in_combat:
                 self.player_total_heal_in_combat[event.attacker] = event.value
-
-            self.player_total_heal_in_combat[event.attacker] += event.value
+            else:
+                self.player_total_heal_in_combat[event.attacker] += event.value
 
         self.player_total_heal_in_combat = dict(sorted(self.player_total_heal_in_combat.items(), key=lambda item: item[1], reverse=True))
 
@@ -115,6 +122,18 @@ class CombatReporter:
             self.player_hps_in_combat = {name: total_heal / self._fight_metadata.durationSec for name, total_heal in self.player_total_heal_in_combat.items()}
 
         self.player_hps_in_combat = dict(sorted(self.player_hps_in_combat.items(), key=lambda item: item[1], reverse=True))
+
+    def _set_overheal_in_combat(self, event: Event):
+        # TODO: Not correct logic. current HP is not acquired from event.resources.HP
+        if event.effectType == "Heal":
+            if event.attacker not in self.player_overheal_in_combat:
+                if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
+                    self.player_overheal_in_combat[event.attacker] = over_heal
+            else:
+                if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
+                    self.player_overheal_in_combat[event.attacker] += over_heal
+
+        self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
 
 
 if __name__ == '__main__':
@@ -132,5 +151,4 @@ if __name__ == '__main__':
     print(f"Highest Heal Map = {report.player_highest_heal_in_combat}")
     print(f"Total Heal Map = {report.player_total_heal_in_combat}")
     print(f"HPS Map = {report.player_hps_in_combat}")
-
-
+    print(f"Over Heal Map = {report.player_overheal_in_combat}")
