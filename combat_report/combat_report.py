@@ -1,6 +1,5 @@
 # TODO LIST
 # Duration tank was fully healed
-# Make dps graph
 # How many times players had near death events (Defined by %HP drops)
 
 from pathlib import Path
