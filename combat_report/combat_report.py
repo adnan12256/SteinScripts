@@ -176,13 +176,12 @@ class CombatReporter:
 
 
 if __name__ == '__main__':
-    json_file_location: str | Path = input("Enter Path to the fight log json file: ")
+    json_file_location: str | Path = input("Enter Path to the fight-log.json file or press ENTER to use default path: ")
     if not json_file_location:
         json_file_location: Path = Path("fight-log.json")
 
     if not json_file_location.is_file() or not json_file_location.suffix == ".json":
         print(f"Invalid file: {json_file_location}")
-        input("Press Enter to exit...")
         exit()
 
     report = CombatReporter(Path(json_file_location))
@@ -202,7 +201,3 @@ if __name__ == '__main__':
     print(f"HPS Map = {report.player_hps_in_combat}")
     print(f"Over Heal Map = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
-
-    print("\n")
-    print("```````````````````````````````````````````````````````````````````````````````````````````````````````````")
-    input("Press Enter to exit...")
