@@ -2,6 +2,7 @@
 # Overheal mapping
 # Duration tank was fully healed
 # Make dps graph
+# How many times players had near death events (Defined by %HP drops)
 
 from pathlib import Path
 from typing import List, Optional
@@ -125,15 +126,16 @@ class CombatReporter:
 
     def _set_overheal_in_combat(self, event: Event):
         # TODO: Not correct logic. current HP is not acquired from event.resources.HP
-        if event.effectType == "Heal":
-            if event.attacker not in self.player_overheal_in_combat:
-                if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
-                    self.player_overheal_in_combat[event.attacker] = over_heal
-            else:
-                if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
-                    self.player_overheal_in_combat[event.attacker] += over_heal
-
-        self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
+        # if event.effectType == "Heal":
+        #     if event.attacker not in self.player_overheal_in_combat:
+        #         if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
+        #             self.player_overheal_in_combat[event.attacker] = over_heal
+        #     else:
+        #         if (over_heal := event.value - (event.resources.HPmax - event.resources.HP)) > 0:
+        #             self.player_overheal_in_combat[event.attacker] += over_heal
+        #
+        # self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
+        ...
 
 
 if __name__ == '__main__':
