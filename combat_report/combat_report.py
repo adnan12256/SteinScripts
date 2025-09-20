@@ -85,6 +85,7 @@ class CombatReporter:
         self._set_dps_in_combat()
         self._set_hps_in_combat()
         self._plot_hp_over_time_in_combat()
+        self._plot_damage_over_time_in_combat()
 
     def _set_highest_damage_in_combat(self, event: Event):
         if event.effectType == "Damage":
@@ -167,6 +168,12 @@ class CombatReporter:
 
     def _plot_hp_over_time_in_combat(self):
         fig = px.line(self._events_df, x="time_sec", y=[event.resources.HP for event in self._fight_events], color="defender", title="HP Over Time")
+        fig.show()
+
+    def _plot_damage_over_time_in_combat(self):
+        self._events_df["Damage"] = [event.value if event.effectType == "Damage" else 0 for event in self._fight_events]
+        self._events_df["Running Total Damage"] = self._events_df.groupby("attacker")["Damage"].cumsum()
+        fig = px.line(self._events_df, x="time_sec", y="Running Total Damage", color="attacker", title="Running Total Damage in Combat")
         fig.show()
 
 
