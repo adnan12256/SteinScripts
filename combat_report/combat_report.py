@@ -22,8 +22,8 @@ class Resources(BaseModel):
     HP: int
     HPmax: int
     Shield: float
-    Mana: int
-    Energy: int
+    Mana: Optional[int]
+    Energy: Optional[int]
 
 
 class Event(BaseModel):
@@ -180,7 +180,7 @@ if __name__ == '__main__':
     if not json_file_location:
         json_file_location: Path = Path(__file__).parent / "fight-log.json"
 
-    if not json_file_location.is_file() or not json_file_location.suffix == ".json":
+    if not Path(json_file_location).is_file() or not Path(json_file_location).suffix == ".json":
         print(f"Invalid file: {json_file_location}")
         exit()
 
