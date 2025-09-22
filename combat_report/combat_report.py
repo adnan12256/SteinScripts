@@ -4,6 +4,7 @@
 from pathlib import Path
 from typing import List, Optional
 from pydantic import BaseModel
+import numpy as np
 import json
 import pandas as pd
 import plotly.express as px
@@ -60,6 +61,7 @@ class CombatReporter:
         self.player_highest_damage_in_combat: dict[str, float] = {}
         self.player_hps_in_combat: dict[str, float] = {}
         self.player_dps_in_combat: dict[str, float] = {}
+        self.player_tps_in_combat: dict[str, float] = {}
         self.player_overheal_in_combat: dict[str, float] = {}
         self.player_total_damage_taken_in_combat: dict[str, float] = {}
         self.player_time_below_20_in_combat: dict[str, float] = {}
@@ -95,8 +97,10 @@ class CombatReporter:
 
         self._set_dps_in_combat()
         self._set_hps_in_combat()
+        self._set_tps_in_combat()
         self._plot_hp_over_time_in_combat()
         self._plot_damage_over_time_in_combat()
+        self._plot_tps_over_time_in_combat()
 
     def _set_highest_damage_in_combat(self, event: Event):
         if event.effectType == "Damage":
@@ -155,6 +159,22 @@ class CombatReporter:
             self.player_hps_in_combat = {name: round(total_heal / self._fight_metadata.durationSec, 3) for name, total_heal in self.player_total_heal_in_combat.items()}
 
         self.player_hps_in_combat = dict(sorted(self.player_hps_in_combat.items(), key=lambda item: item[1], reverse=True))
+
+    def _set_tps_in_combat(self):
+        hps = {}
+        dps = {}
+
+        if self.player_total_heal_in_combat:
+            hps = {name: round(total_heal / self._fight_metadata.durationSec, 3) for name, total_heal in self.player_total_heal_in_combat.items()}
+
+        if self.player_total_damage_in_combat:
+            dps = {name: round(total_damage / self._fight_metadata.durationSec, 3) for name, total_damage in self.player_total_damage_in_combat.items()}
+
+        all_players = set(hps.keys()) | set(dps.keys())
+        for player in all_players:
+            self.player_tps_in_combat[player] = hps.get(player, 0) + dps.get(player, 0)
+
+        self.player_tps_in_combat = dict(sorted(self.player_tps_in_combat.items(), key=lambda item: item[1], reverse=True))
 
     def _set_overheal_in_combat(self, event: Event):
         if event.effectType == "Heal":
@@ -216,9 +236,25 @@ class CombatReporter:
         fig.show()
 
     def _plot_damage_over_time_in_combat(self):
-        self._events_df["Damage"] = [event.value if event.effectType == "Damage" else 0 for event in self._fight_events]
-        self._events_df["Running Total Damage"] = self._events_df.groupby("attacker")["Damage"].cumsum()
-        fig = px.line(self._events_df, x="Time (s)", y="Running Total Damage", color="attacker", title="Running Total Damage in Combat")
+        df = self._events_df.copy()
+        df["Damage"] = [event.value if event.effectType == "Damage" else 0 for event in self._fight_events]
+        df["Running Total Damage"] = df.groupby("attacker")["Damage"].cumsum()
+        fig = px.line(df, x="Time (s)", y="Running Total Damage", color="attacker", title="Running Total Damage in Combat")
+        fig.show()
+
+    def _plot_tps_over_time_in_combat(self):
+        df = self._events_df.copy()
+
+        df["Damage"] = [event.value if event.effectType == "Damage" else 0 for event in self._fight_events]
+        df["Running Total Damage"] = df.groupby("attacker")["Damage"].cumsum()
+
+        df["Heal"] = [event.value if event.effectType == "Heal" else 0 for event in self._fight_events]
+        df["Running Total Heal"] = df.groupby("attacker")["Heal"].cumsum()
+
+        df['Total Running Total Threat'] = df['Running Total Damage'] + df['Running Total Heal']
+        df['Threat/s'] = np.where(df['Time (s)'] == 0, 0, df['Total Running Total Threat'] / df['Time (s)'])
+        fig = px.line(df, x="Time (s)", y="Threat/s", color="attacker", title="TPS in Combat")
+
         fig.show()
 
 
@@ -239,6 +275,7 @@ if __name__ == '__main__':
     print(f"Total Damage Map = {report.player_total_damage_in_combat}")
     print(f"Total Damage Taken Map = {report.player_total_damage_taken_in_combat}")
     print(f"DPS Map = {report.player_dps_in_combat}")
+    print(f"TPS Map (hps+dps)= {report.player_tps_in_combat}")
 
     print("\n")
     print("```````````````````````````````````````````````````````````````````````````````````````````````````````````")
@@ -246,6 +283,6 @@ if __name__ == '__main__':
     print(f"Highest Heal Map = {report.player_highest_heal_in_combat}")
     print(f"Total Heal Map = {report.player_total_heal_in_combat}")
     print(f"HPS Map = {report.player_hps_in_combat}")
-    print(f"Duration player HP below {report.critical_hp_threshold} = {report.player_time_below_20_in_combat}")
+    print(f"Total Duration player below {report.critical_hp_threshold}HP= {report.player_time_below_20_in_combat}")
     print(f"Over Heal Map (Broken) = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
