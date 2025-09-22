@@ -195,7 +195,7 @@ class CombatReporter:
             self.last_hp_below_critical_threshold[defender] = time_s
 
         # If player recovers above 20% and was tracked
-        elif hp >= self.critical_hp_threshold and defender in self.last_hp_below_critical_threshold:
+        elif defender in self.last_hp_below_critical_threshold and (hp >= self.critical_hp_threshold or hp == 0):
             duration = time_s - self.last_hp_below_critical_threshold[defender]
             self.player_time_below_20_in_combat[defender] = self.player_time_below_20_in_combat.get(defender, 0) + duration
             del self.last_hp_below_critical_threshold[defender]
