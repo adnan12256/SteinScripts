@@ -95,8 +95,8 @@ class CombatReporter:
 
         self._set_dps_in_combat()
         self._set_hps_in_combat()
-        # self._plot_hp_over_time_in_combat()
-        # self._plot_damage_over_time_in_combat()
+        self._plot_hp_over_time_in_combat()
+        self._plot_damage_over_time_in_combat()
 
     def _set_highest_damage_in_combat(self, event: Event):
         if event.effectType == "Damage":
