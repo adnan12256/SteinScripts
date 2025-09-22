@@ -69,7 +69,7 @@ class CombatReporter:
         self.player_current_hp_in_combat: dict[str, float] = {}
 
         # Constants
-        self.critical_hp_percent: float = 0.6
+        self.critical_hp_threshold: float = 1100
 
         # Holds json data
         self._fight_metadata: Metadata = fight_log.metadata
@@ -190,14 +190,12 @@ class CombatReporter:
         if hpmax == 0:
             return
 
-        hp_percent = hp / hpmax
-
         # If player drops below threshold and wasn't already tracked
-        if hp_percent < self.critical_hp_percent and defender not in self.last_hp_below_critical_threshold:
+        if hp < self.critical_hp_threshold and defender not in self.last_hp_below_critical_threshold:
             self.last_hp_below_critical_threshold[defender] = time_s
 
         # If player recovers above 20% and was tracked
-        elif hp_percent >= self.critical_hp_percent and defender in self.last_hp_below_critical_threshold:
+        elif hp >= self.critical_hp_threshold and defender in self.last_hp_below_critical_threshold:
             duration = time_s - self.last_hp_below_critical_threshold[defender]
             self.player_time_below_20_in_combat[defender] = self.player_time_below_20_in_combat.get(defender, 0) + duration
             del self.last_hp_below_critical_threshold[defender]
@@ -248,6 +246,6 @@ if __name__ == '__main__':
     print(f"Highest Heal Map = {report.player_highest_heal_in_combat}")
     print(f"Total Heal Map = {report.player_total_heal_in_combat}")
     print(f"HPS Map = {report.player_hps_in_combat}")
-    print(f"Duration player HP below {report.critical_hp_percent * 100}% = {report.player_time_below_20_in_combat}")
+    print(f"Duration player HP below {report.critical_hp_threshold} = {report.player_time_below_20_in_combat}")
     print(f"Over Heal Map (Broken) = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
