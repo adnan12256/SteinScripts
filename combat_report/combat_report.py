@@ -172,7 +172,7 @@ class CombatReporter:
 
         all_players = set(hps.keys()) | set(dps.keys())
         for player in all_players:
-            self.player_tps_in_combat[player] = hps.get(player, 0) + dps.get(player, 0)
+            self.player_tps_in_combat[player] = round(hps.get(player, 0) + dps.get(player, 0), 3)
 
         self.player_tps_in_combat = dict(sorted(self.player_tps_in_combat.items(), key=lambda item: item[1], reverse=True))
 
