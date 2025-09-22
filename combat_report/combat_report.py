@@ -46,11 +46,14 @@ class FightLog(BaseModel):
 
 class CombatReporter:
     def __init__(self, fight_log_json: Path):
+        # Opens and reads json
         with open(fight_log_json) as f:
             data = json.load(f)
 
+        # Puts json data info pydantic base model schema
         fight_log = FightLog(**data)
 
+        # Holds metric info
         self.player_total_heal_in_combat: dict[str, float] = {}
         self.player_total_damage_in_combat: dict[str, float] = {}
         self.player_highest_heal_in_combat: dict[str, float] = {}
@@ -58,9 +61,17 @@ class CombatReporter:
         self.player_hps_in_combat: dict[str, float] = {}
         self.player_dps_in_combat: dict[str, float] = {}
         self.player_overheal_in_combat: dict[str, float] = {}
-        self.player_current_hp_in_combat: dict[str, float] = {}
         self.player_total_damage_taken_in_combat: dict[str, float] = {}
+        self.player_time_below_20_in_combat: dict[str, float] = {}
 
+        # Used to calculate some metrics
+        self.last_hp_below_critical_threshold: dict[str, float] = {}
+        self.player_current_hp_in_combat: dict[str, float] = {}
+
+        # Constants
+        self.critical_hp_percent: float = 0.6
+
+        # Holds json data
         self._fight_metadata: Metadata = fight_log.metadata
         self._fight_events: list[Event] = fight_log.events
 
@@ -69,6 +80,7 @@ class CombatReporter:
         start_time = self._fight_metadata.startTime
         self._events_df["Time (s)"] = (self._events_df["timestamp"] - start_time) / 1000
 
+        # Gets all the metrics
         self._setup_metrics()
 
     def _setup_metrics(self):
@@ -79,11 +91,12 @@ class CombatReporter:
             self._set_total_damage_taken_in_combat(event)
             self._set_total_heal_in_combat(event)
             self._set_overheal_in_combat(event)
+            self._set_time_below_critical_hp_in_combat(event)
 
         self._set_dps_in_combat()
         self._set_hps_in_combat()
-        self._plot_hp_over_time_in_combat()
-        self._plot_damage_over_time_in_combat()
+        # self._plot_hp_over_time_in_combat()
+        # self._plot_damage_over_time_in_combat()
 
     def _set_highest_damage_in_combat(self, event: Event):
         if event.effectType == "Damage":
@@ -164,6 +177,42 @@ class CombatReporter:
         self.player_current_hp_in_combat = dict(sorted(self.player_current_hp_in_combat.items(), key=lambda item: item[1], reverse=True))
         self.player_overheal_in_combat = dict(sorted(self.player_overheal_in_combat.items(), key=lambda item: item[1], reverse=True))
 
+    def _set_time_below_critical_hp_in_combat(self, event: Event):
+        """
+            Will not work if players starts with critical hp. Can only work after an event logs the player at critical hp
+
+        """
+        defender: str = event.defender
+        hp: float = event.resources.HP
+        hpmax: float = event.resources.HPmax
+        time_s: float = (event.timestamp - self._fight_metadata.startTime) / 1000
+
+        if hpmax == 0:
+            return
+
+        hp_percent = hp / hpmax
+
+        # If player drops below threshold and wasn't already tracked
+        if hp_percent < self.critical_hp_percent and defender not in self.last_hp_below_critical_threshold:
+            self.last_hp_below_critical_threshold[defender] = time_s
+
+        # If player recovers above 20% and was tracked
+        elif hp_percent >= self.critical_hp_percent and defender in self.last_hp_below_critical_threshold:
+            duration = time_s - self.last_hp_below_critical_threshold[defender]
+            self.player_time_below_20_in_combat[defender] = self.player_time_below_20_in_combat.get(defender, 0) + duration
+            del self.last_hp_below_critical_threshold[defender]
+
+        if event == self._fight_events[-1] and self.last_hp_below_critical_threshold:
+            # If someone ended the fight still below 20% → close out with fight end time
+            for defender, start_time in self.last_hp_below_critical_threshold.items():
+                duration = self._fight_metadata.durationSec - start_time
+                self.player_time_below_20_in_combat[defender] = self.player_time_below_20_in_combat.get(defender, 0) + duration
+
+        # Sort by longest survival under critical threshold%
+        self.player_time_below_20_in_combat = dict(
+            sorted(self.player_time_below_20_in_combat.items(), key=lambda x: x[1], reverse=True)
+        )
+
     def _plot_hp_over_time_in_combat(self):
         fig = px.line(self._events_df, x="Time (s)", y=[event.resources.HP for event in self._fight_events], color="defender", title="HP Over Time in Combat", labels={"y": "HP"})
         fig.show()
@@ -178,7 +227,7 @@ class CombatReporter:
 if __name__ == '__main__':
     json_file_location: str | Path = input("Enter Path to the fight-log.json file or press ENTER to use default path: ")
     if not json_file_location:
-        json_file_location: Path = Path(__file__).parent / "fight-log.json"
+        json_file_location: Path = Path(__file__).parent / "fight-log-1758484168170.json"
 
     if not Path(json_file_location).is_file() or not Path(json_file_location).suffix == ".json":
         print(f"Invalid file: {json_file_location}")
@@ -199,5 +248,6 @@ if __name__ == '__main__':
     print(f"Highest Heal Map = {report.player_highest_heal_in_combat}")
     print(f"Total Heal Map = {report.player_total_heal_in_combat}")
     print(f"HPS Map = {report.player_hps_in_combat}")
-    print(f"Over Heal Map = {report.player_overheal_in_combat}")
+    print(f"Duration player HP below {report.critical_hp_percent * 100}% = {report.player_time_below_20_in_combat}")
+    print(f"Over Heal Map (Broken) = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
