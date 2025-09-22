@@ -216,15 +216,15 @@ class CombatReporter:
 
         # If player recovers above 20% and was tracked
         elif defender in self.last_hp_below_critical_threshold and (hp >= self.critical_hp_threshold or hp == 0):
-            duration = round(time_s - self.last_hp_below_critical_threshold[defender], 3)
-            self.player_time_below_20_in_combat[defender] = self.player_time_below_20_in_combat.get(defender, 0) + duration
+            duration = time_s - self.last_hp_below_critical_threshold[defender]
+            self.player_time_below_20_in_combat[defender] = round(self.player_time_below_20_in_combat.get(defender, 0) + duration, 3)
             del self.last_hp_below_critical_threshold[defender]
 
         if event == self._fight_events[-1] and self.last_hp_below_critical_threshold:
             # If someone ended the fight still below 20% → close out with fight end time
             for defender, start_time in self.last_hp_below_critical_threshold.items():
-                duration = round(self._fight_metadata.durationSec - start_time,3)
-                self.player_time_below_20_in_combat[defender] = self.player_time_below_20_in_combat.get(defender, 0) + duration
+                duration = self._fight_metadata.durationSec - start_time
+                self.player_time_below_20_in_combat[defender] = round(self.player_time_below_20_in_combat.get(defender, 0) + duration, 3)
 
         # Sort by longest survival under critical threshold%
         self.player_time_below_20_in_combat = dict(
