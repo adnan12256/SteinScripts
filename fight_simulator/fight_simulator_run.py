@@ -42,7 +42,6 @@ time = Decimal("0.0")
 print("=== Combat Simulation Start ===")
 
 while time < duration:
-    # regen energy
     if time % 1 == 0:
         energy = min([max_energy, energy + energy_regen_per_sec])
         print(f"New energy {energy}")
@@ -50,14 +49,11 @@ while time < duration:
     # try to attack (priority order)
     for w in weapons.values():
         if cooldowns[w.name] <= 0 and energy >= w.energy_cost:
-            # spend energy
             energy -= w.energy_cost
-            # put weapon on cooldown
             cooldowns[w.name] = w.cooldown
-            # compute average damage (simplified)
             dmg = (w.dmg_low + w.dmg_high) // 2
             print(f"{time:4.1f}s: Used {w.name}, dealt {dmg}, energy left {energy:.1f}")
-            break  # one action per tick
+            break
 
     # tick down cooldowns
     for k in cooldowns:
