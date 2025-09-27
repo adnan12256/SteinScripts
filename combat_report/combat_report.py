@@ -261,7 +261,7 @@ class CombatReporter:
 if __name__ == '__main__':
     json_file_location: str | Path = input("Enter Path to the fight-log.json file or press ENTER to use default path: ")
     if not json_file_location:
-        json_file_location: Path = Path(__file__).parent / "fight-log.json"
+        json_file_location: Path = Path(__file__).parent / "fight-log-1758484168170.json"
 
     if not Path(json_file_location).is_file() or not Path(json_file_location).suffix == ".json":
         print(f"Invalid file: {json_file_location}")

@@ -1,0 +1,96 @@
+{
+  "armor": {
+    "head": {
+      "armor": 41,
+      "cbr": 27,
+      "death damage": 41,
+      "energy regen": 0.5
+    },
+    "chest": {
+      "armor": 78,
+      "death damage": 58,
+      "energy regen": 1.1,
+      "life": 506
+    },
+    "legs": {
+      "armor": 55,
+      "cbr": 36,
+      "death damage": 37,
+      "life": 332
+    },
+    "shoulders": {
+      "armor": 40,
+      "ccr": 10,
+      "death damage": 29,
+      "energy regen": 0.5
+    },
+    "gloves": {
+      "armor": 29,
+      "ccr": 7,
+      "cbr": 20,
+      "death damage": 21,
+      "energy regen": 0.4,
+      "life": 189
+    },
+    "boots": {
+      "armor": 29,
+      "ccr": 7,
+      "cbr": 20,
+      "death damage": 21,
+      "energy regen": 0.4,
+      "life": 198
+    }
+  },
+  "weapons":{
+    "repeater": {
+      "regular_damage_lower": 22,
+      "regular_damage_higher": 41,
+      "regular_damage_bonus_percent": 15,
+      "casttime_s": 0.6,
+      "cooldown_s": 0.6,
+      "energy": 0
+    },
+    "cleaving strike": {
+      "regular_damage_lower": 114,
+      "regular_damage_higher": 211,
+      "regular_damage_bonus_percent": 80,
+      "casttime_s": 0.3,
+      "cooldown_s": 6,
+      "energy": 6
+    },
+    "reckless slam": {
+      "regular_damage_lower": 65,
+      "regular_damage_higher": 120,
+      "regular_damage_bonus_percent": 65,
+      "bleed_damage": 19,
+      "bleed_bonus": 13,
+      "casttime_s": 0.3,
+      "cooldown_s": 6,
+      "energy": 10
+    },
+    "breaker": {
+      "regular_damage_lower": 40,
+      "regular_damage_higher": 75,
+      "regular_damage_bonus_percent": 38,
+      "casttime_s": 0.6,
+      "cooldown_s": 7.2,
+      "energy": 15
+    },
+    "shiver": {
+      "regular_damage_lower": 226,
+      "regular_damage_higher": 419,
+      "regular_damage_bonus_percent": 100,
+      "casttime_s": 0.3,
+      "cooldown_s": 20,
+      "energy": 6
+    },
+    "tear": {
+      "regular_damage_lower": 88,
+      "regular_damage_higher": 165,
+      "regular_damage_bonus_percent": 50,
+      "casttime_s": 0.6,
+      "cooldown_s": 9,
+      "energy": 6
+    }
+  }
+}
