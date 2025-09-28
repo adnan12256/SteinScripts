@@ -3,6 +3,7 @@ from dataclasses import dataclass, fields
 from fight_simulator.class_configs.loader.character_loader import CharacterFactory
 from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
+from fight_simulator.class_configs.models.hunter_weapons import HunterWeaponStats
 from fight_simulator.class_configs.models.mage_weapons import MageWeaponStats
 from fight_simulator.class_configs.models.shaman_weapons import ShamanWeaponStats
 from fight_simulator.class_configs.models.tank_weapons import TankWeaponStats
@@ -214,6 +215,39 @@ class ShamanDamage(BasicDamageCalculation, CharacterEquipArmor):
         return self._weapon_average_damage(self._shaman_info.weapons.frost_totem, multiplier=12)
 
 
+class HunterDamage(BasicDamageCalculation, CharacterEquipArmor):
+    def __init__(self):
+        self._hunter_info: CharacterEquipment = CharacterFactory().get_hunter_info()
+        self._player_stats: PlayerStats = self._setup_player_stats(self._hunter_info)
+
+    def _weapon_average_damage(self, weapon: HunterWeaponStats, multiplier: int = 1, bonus_percent: int = 0) -> float:
+        wep_bonus = weapon.regular_damage_bonus_percent
+        if bonus_percent > 0:
+            wep_bonus = weapon.regular_damage_bonus_percent + bonus_percent
+
+        # Average base damage between lower and higher
+        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_damage(self._player_stats, base_damage, wep_bonus)
+
+        return round(avg_damage * multiplier, 3)
+
+    # Define specific moves using the generic helper
+    def repeater_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.repeater)
+
+    def powerful_shot_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.powerful_shot)
+
+    def arrow_hail_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.arrow_hail)
+
+    def toxic_shot_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.toxic_shot)
+
+    def multi_shot_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.multi_shot, bonus_percent=24)
+
+
 if __name__ == "__main__":
     fighter_damage = FighterDamage()
     print("Fighter:")
@@ -258,3 +292,11 @@ if __name__ == "__main__":
     print(f"Tide Average Damage: {shaman_damage.tide_average_damage()}")
     print(f"Ice Totem Average Damage: {shaman_damage.ice_totem_average_damage()}")
     print(f"Frost Totem Average Damage: {shaman_damage.frost_totem_average_damage()}")
+
+    hunter_damage = HunterDamage()
+    print("\nShaman:")
+    print(f"Repeater Average Damage: {hunter_damage.repeater_average_damage()}")
+    print(f"Powerful Shot Average Damage: {hunter_damage.powerful_shot_average_damage()}")
+    print(f"Arrow Hail Average Damage: {hunter_damage.arrow_hail_average_damage()}")
+    print(f"Toxic Shot Average Damage: {hunter_damage.toxic_shot_average_damage()}")
+    print(f"Multi Shot Average Damage: {hunter_damage.multi_shot_average_damage()}")
