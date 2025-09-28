@@ -4,6 +4,7 @@ from fight_simulator.class_configs.loader.character_loader import CharacterFacto
 from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
 from fight_simulator.class_configs.models.mage_weapons import MageWeaponStats
+from fight_simulator.class_configs.models.tank_weapons import TankWeaponStats
 
 
 @dataclass
@@ -118,6 +119,37 @@ class MageDamage(BasicDamageCalculation, CharacterEquipArmor):
         return self._weapon_average_damage(self._mage_info.weapons.flame_rush_legacy, multiplier=10)
 
 
+class TankDamage(BasicDamageCalculation, CharacterEquipArmor):
+    def __init__(self):
+        self._tank_info: CharacterEquipment = CharacterFactory().get_tank_info()
+        self._player_stats: PlayerStats = self._setup_player_stats(self._tank_info)
+
+    def _weapon_average_damage(self, weapon: TankWeaponStats, multiplier: int = 1) -> float:
+        # Average base damage between lower and higher
+        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        return round(avg_damage * multiplier, 3)
+
+    # Define specific moves using the generic helper
+    def repeater_average_damage(self) -> float:
+        return self._weapon_average_damage(self._tank_info.weapons.repeater)
+
+    def execute_average_damage(self) -> float:
+        return self._weapon_average_damage(self._tank_info.weapons.execute)
+
+    def roar_average_damage(self) -> float:
+        return self._weapon_average_damage(self._tank_info.weapons.roar)
+
+    def distract_average_damage(self) -> float:
+        return self._weapon_average_damage(self._tank_info.weapons.distract)
+
+    def impale_average_damage(self) -> float:
+        return self._weapon_average_damage(self._tank_info.weapons.impale)
+
+    def warstrike_average_damage(self) -> float:
+        return self._weapon_average_damage(self._tank_info.weapons.warstrike_legacy)
+
+
 if __name__ == "__main__":
     fighter_damage = FighterDamage()
     print("Fighter:")
@@ -131,9 +163,18 @@ if __name__ == "__main__":
     mage_damage = MageDamage()
     print("\nMage:")
     print(f"Repeater Average Damage: {mage_damage.repeater_average_damage()}")
-    print(f"Fireball Strike Average Damage: {mage_damage.fireball_average_damage()}")
+    print(f"Fireball Average Damage: {mage_damage.fireball_average_damage()}")
     print(f"Flamestrike Average Damage: {mage_damage.flamestrike_average_damage()}")
     print(f"Firebomb Average Damage: {mage_damage.firebomb_average_damage()}")
     print(f"Sunfire Average Damage: {mage_damage.sunfire_average_damage()}")
     print(f"Flamerush Average Damage: {mage_damage.flamerush_average_damage()}")
     print(f"Flamerush Legacy Average Damage: {mage_damage.flamerush_legacy_average_damage()}")
+
+    tank_damage = TankDamage()
+    print("\nTank:")
+    print(f"Repeater Average Damage: {tank_damage.repeater_average_damage()}")
+    print(f"Execute Average Damage: {tank_damage.execute_average_damage()}")
+    print(f"Roar Average Damage: {tank_damage.roar_average_damage()}")
+    print(f"Distract Average Damage: {tank_damage.distract_average_damage()}")
+    print(f"Impale Average Damage: {tank_damage.impale_average_damage()}")
+    print(f"Warstrike Average Damage: {tank_damage.warstrike_average_damage()}")
