@@ -94,7 +94,7 @@
       "regular_damage_bonus_percent": 100,
       "casttime_s": 1.0,
       "cooldown_s": 20,
-      "energy": 41
+      "mana": 41
     },
     "flame_rush_legacy": {
       "regular_damage_lower": 48,
