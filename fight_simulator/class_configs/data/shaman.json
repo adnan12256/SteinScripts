@@ -1,0 +1,102 @@
+{
+  "armor": {
+    "head": {
+      "armor": 41,
+      "cbr": 27,
+      "damage": 39,
+      "mana_regen": 2.5
+    },
+    "chest": {
+      "armor": 76,
+      "damage": 78,
+      "mana_regen": 4.9,
+      "mana": 286,
+      "life": 505
+    },
+    "legs": {
+      "armor": 54,
+      "cbr": 35,
+      "damage": 50,
+      "mana": 199,
+      "life": 337
+    },
+    "shoulders": {
+      "armor": 40,
+      "ccr": 9,
+      "damage": 38,
+      "mana_regen": 2.5,
+      "mana": 146
+    },
+    "gloves": {
+      "armor": 29,
+      "ccr": 7,
+      "cbr": 20,
+      "damage": 28,
+      "mana_regen ": 1.7,
+      "mana": 108,
+      "life": 189
+    },
+    "boots": {
+      "armor": 29,
+      "ccr": 8,
+      "cbr": 18,
+      "damage": 28,
+      "mana_regen ": 1.7,
+      "mana": 106,
+      "life": 199
+    }
+  },
+  "weapons":{
+    "repeater": {
+      "regular_damage_lower": 30,
+      "regular_damage_higher": 55,
+      "regular_damage_bonus_percent": 15,
+      "casttime_s": 0.8,
+      "cooldown_s": 0.8,
+      "mana": 0
+    },
+    "frost_bolt": {
+      "regular_damage_lower": 149,
+      "regular_damage_higher": 278,
+      "regular_damage_bonus_percent": 80,
+      "casttime_s": 0.8,
+      "cooldown_s": 4,
+      "mana": 31
+    },
+    "waterfall": {
+      "regular_damage_lower": 185,
+      "regular_damage_higher": 344,
+      "regular_damage_bonus_percent": 65,
+      "backward_damage_lower": 168,
+      "backward_damage_higher": 313,
+      "backward_damage_bonus_percent": 85,
+      "casttime_s": 0.8,
+      "cooldown_s": 6.4,
+      "mana": 56
+    },
+    "tide": {
+      "regular_damage_lower": 382,
+      "regular_damage_higher": 382,
+      "regular_damage_bonus_percent": 100,
+      "casttime_s": 0.8,
+      "cooldown_s": 20,
+      "mana": 33
+    },
+    "ice_totem": {
+      "regular_damage_lower": 85,
+      "regular_damage_higher": 85,
+      "regular_damage_bonus_percent": 13,
+      "casttime_s": 0.5,
+      "cooldown_s": 12,
+      "mana": 95
+    },
+    "frost_totem": {
+      "regular_damage_lower": 21,
+      "regular_damage_higher": 21,
+      "regular_damage_bonus_percent": 13,
+      "casttime_s": 0.5,
+      "cooldown_s": 9.6,
+      "mana": 76
+    }
+  }
+}
