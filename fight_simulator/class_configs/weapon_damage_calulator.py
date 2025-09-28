@@ -170,10 +170,10 @@ class WarlockDamage(BasicDamageCalculation, CharacterEquipArmor):
         return self._weapon_average_damage(self._warlock_info.weapons.void_hex, multiplier=5)
 
     def life_burn_average_damage(self) -> float:
-        return self._weapon_average_damage(self._warlock_info.weapons.life_burn, multiplier=3)
+        return self._weapon_average_damage(self._warlock_info.weapons.life_burn)
 
     def sacrifice_average_damage(self) -> float:
-        return self._weapon_average_damage(self._warlock_info.weapons.sacrifice, multiplier=3)
+        return self._weapon_average_damage(self._warlock_info.weapons.sacrifice)
 
 
 if __name__ == "__main__":
