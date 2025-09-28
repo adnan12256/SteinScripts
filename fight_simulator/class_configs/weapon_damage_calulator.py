@@ -4,6 +4,7 @@ from fight_simulator.class_configs.loader.character_loader import CharacterFacto
 from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
 from fight_simulator.class_configs.models.mage_weapons import MageWeaponStats
+from fight_simulator.class_configs.models.shaman_weapons import ShamanWeaponStats
 from fight_simulator.class_configs.models.tank_weapons import TankWeaponStats
 from fight_simulator.class_configs.models.warlock_weapons import WarlockWeaponStats
 
@@ -176,6 +177,43 @@ class WarlockDamage(BasicDamageCalculation, CharacterEquipArmor):
         return self._weapon_average_damage(self._warlock_info.weapons.sacrifice)
 
 
+class ShamanDamage(BasicDamageCalculation, CharacterEquipArmor):
+    def __init__(self):
+        self._shaman_info: CharacterEquipment = CharacterFactory().get_shaman_info()
+        self._player_stats: PlayerStats = self._setup_player_stats(self._shaman_info)
+
+    def _weapon_average_damage(self, weapon: ShamanWeaponStats, multiplier: int = 1) -> float:
+        # Average base damage between lower and higher
+        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+
+        backward_damage = 0
+        if hasattr(weapon, "backward_damage_lower") and weapon.backward_damage_lower is not None:
+            backward_base_damage = (weapon.backward_damage_lower + weapon.backward_damage_higher) / 2
+            backward_damage = self._average_damage(self._player_stats, backward_base_damage, weapon.backward_damage_bonus_percent)
+
+        return round(avg_damage * multiplier + backward_damage, 3)
+
+    # Define specific moves using the generic helper
+    def repeater_average_damage(self) -> float:
+        return self._weapon_average_damage(self._shaman_info.weapons.repeater)
+
+    def frost_bolt_average_damage(self) -> float:
+        return self._weapon_average_damage(self._shaman_info.weapons.frost_bolt)
+
+    def waterfall_average_damage(self) -> float:
+        return self._weapon_average_damage(self._shaman_info.weapons.waterfall)
+
+    def tide_average_damage(self) -> float:
+        return self._weapon_average_damage(self._shaman_info.weapons.tide)
+
+    def ice_totem_average_damage(self) -> float:
+        return self._weapon_average_damage(self._shaman_info.weapons.ice_totem, multiplier=4)
+
+    def frost_totem_average_damage(self) -> float:
+        return self._weapon_average_damage(self._shaman_info.weapons.frost_totem, multiplier=12)
+
+
 if __name__ == "__main__":
     fighter_damage = FighterDamage()
     print("Fighter:")
@@ -211,3 +249,12 @@ if __name__ == "__main__":
     print(f"Void hex Average Damage: {warlock_damage.void_hex_average_damage()}")
     print(f"Life burn Average Damage: {warlock_damage.life_burn_average_damage()}")
     print(f"Sacrifice Average Damage: {warlock_damage.sacrifice_average_damage()}")
+
+    shaman_damage = ShamanDamage()
+    print("\nShaman:")
+    print(f"Repeater Average Damage: {shaman_damage.repeater_average_damage()}")
+    print(f"Frost Bolt Average Damage: {shaman_damage.frost_bolt_average_damage()}")
+    print(f"Waterfall Average Damage: {shaman_damage.waterfall_average_damage()}")
+    print(f"Tide Average Damage: {shaman_damage.tide_average_damage()}")
+    print(f"Ice Totem Average Damage: {shaman_damage.ice_totem_average_damage()}")
+    print(f"Frost Totem Average Damage: {shaman_damage.frost_totem_average_damage()}")
