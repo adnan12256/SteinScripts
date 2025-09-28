@@ -1,0 +1,108 @@
+{
+  "armor": {
+    "head": {
+      "armor": 19,
+      "cbr": 10,
+      "heal": 48,
+      "mana": 151,
+      "mana_regen": 2.5
+    },
+    "chest": {
+      "armor": 36,
+      "heal": 96,
+      "mana": 278,
+      "mana_regen": 4.9,
+      "life": 522
+    },
+    "legs": {
+      "armor": 24,
+      "ccr": 14,
+      "heal": 65,
+      "mana": 196,
+      "life": 326
+    },
+    "shoulders": {
+      "armor": 18,
+      "cdr": 6,
+      "heal": 48,
+      "mana": 149,
+      "mana_regen": 2.4
+    },
+    "gloves": {
+      "armor": 14,
+      "cdr": 5,
+      "ccr": 7,
+      "heal": 35,
+      "mana": 106,
+      "mana_regen": 1.7,
+      "life": 198
+    },
+    "boots": {
+      "armor": 14,
+      "cdr": 5,
+      "ccr": 8,
+      "heal": 34,
+      "mana": 106,
+      "mana_regen": 1.7,
+      "life": 197
+    }
+  },
+  "weapons":{
+    "repeater": {
+      "regular_damage_lower": 21,
+      "regular_damage_higher": 39,
+      "regular_damage_bonus_percent": 15,
+      "casttime_s": 0.8,
+      "cooldown_s": 0.8,
+      "mana": 0
+    },
+    "restoration": {
+      "regular_damage_lower": 123,
+      "regular_damage_higher": 230,
+      "regular_damage_bonus_percent": 100,
+      "casttime_s": 0.8,
+      "cooldown_s": 4,
+      "mana": 41
+    },
+    "blessing_legacy": {
+      "regular_damage_lower": 48,
+      "regular_damage_higher": 48,
+      "regular_damage_bonus_percent": 20,
+      "casttime_s": 0.8,
+      "cooldown_s": 6.4,
+      "mana": 76
+    },
+    "blessing": {
+      "regular_damage_lower": 174,
+      "regular_damage_higher": 233,
+      "regular_damage_bonus_percent": 33,
+      "casttime_s": 4.0,
+      "cooldown_s": 8.4,
+      "mana": 195
+    },
+    "holy_barrage_legacy": {
+      "regular_damage_lower": 91,
+      "regular_damage_higher": 91,
+      "regular_damage_bonus_percent": 20,
+      "casttime_s": 0.84,
+      "cooldown_s": 24.07,
+      "mana": 50
+    },
+    "eviction": {
+      "regular_damage_lower": 487,
+      "regular_damage_higher": 487,
+      "regular_damage_bonus_percent": 100,
+      "casttime_s": 1.0,
+      "cooldown_s": 10,
+      "mana": 84
+    },
+    "life_burst": {
+      "regular_damage_lower": 113,
+      "regular_damage_higher": 113,
+      "regular_damage_bonus_percent": 30,
+      "casttime_s": 1.0,
+      "cooldown_s": 10,
+      "mana": 159
+    }
+  }
+}
