@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class ArmorPiece(BaseModel):
     armor: int
+    cdr: Optional[int] = None
     cbr: Optional[int] = None
     ccr: Optional[int] = None
     damage: Optional[int] = None
