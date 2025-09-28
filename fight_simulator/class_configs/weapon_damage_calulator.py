@@ -1,6 +1,6 @@
 from dataclasses import dataclass, fields
 
-from fight_simulator.class_configs.loader.character_loader import CharacterEquipmentInfo
+from fight_simulator.class_configs.loader.character_loader import CharacterFactory
 from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
 
@@ -32,7 +32,7 @@ class BasicDamageCalculation:
 
 class FighterDamage(BasicDamageCalculation):
     def __init__(self):
-        self._fighter_info: CharacterEquipment = CharacterEquipmentInfo().get_fighter_info()
+        self._fighter_info: CharacterEquipment = CharacterFactory().get_fighter_info()
         self._player_stats: PlayerStats = self._setup_player_stats()
 
     def _setup_player_stats(self) -> PlayerStats:
