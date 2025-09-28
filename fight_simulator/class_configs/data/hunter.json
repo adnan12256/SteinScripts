@@ -1,0 +1,85 @@
+{
+  "armor": {
+    "head": {
+      "armor": 24,
+      "cbr": 27,
+      "damage": 48,
+      "energy_regen": 0.5
+    },
+    "chest": {
+      "armor": 47,
+      "damage": 96,
+      "mana": 285,
+      "energy_regen": 1.1,
+      "life": 406
+    },
+    "legs": {
+      "armor": 33,
+      "cbr": 36,
+      "damage": 65,
+      "life": 277
+    },
+    "shoulders": {
+      "armor": 21,
+      "ccr": 10,
+      "damage": 48,
+      "energy_regen": 0.5
+    },
+    "gloves": {
+      "armor": 18,
+      "ccr": 8,
+      "cbr": 18,
+      "damage": 35,
+      "energy_regen": 0.4,
+      "life": 154
+    },
+    "boots": {
+      "armor": 15,
+      "ccr": 7,
+      "cbr": 17,
+      "energy_regen": 0.3
+    }
+  },
+  "weapons":{
+    "repeater": {
+      "regular_damage_lower": 37,
+      "regular_damage_higher": 68,
+      "regular_damage_bonus_percent": 15,
+      "casttime_s": 1.0,
+      "cooldown_s": 1.0,
+      "energy": 0
+    },
+    "powerful_shot": {
+      "regular_damage_lower": 144,
+      "regular_damage_higher": 269,
+      "regular_damage_bonus_percent": 80,
+      "casttime_s": 1.0,
+      "cooldown_s": 5,
+      "energy": 10
+    },
+    "arrow_hail": {
+      "regular_damage_lower": 239,
+      "regular_damage_higher": 444,
+      "regular_damage_bonus_percent": 130,
+      "casttime_s": 1.0,
+      "cooldown_s": 15,
+      "energy": 11
+    },
+    "toxic_shot": {
+      "regular_damage_lower": 56,
+      "regular_damage_higher": 56,
+      "regular_damage_bonus_percent": 26,
+      "casttime_s": 1.0,
+      "cooldown_s": 9,
+      "energy": 20
+    },
+    "multi_shot": {
+      "regular_damage_lower": 181,
+      "regular_damage_higher": 336,
+      "regular_damage_bonus_percent": 150,
+      "casttime_s": 1.0,
+      "cooldown_s": 10,
+      "energy": 23
+    }
+  }
+}
