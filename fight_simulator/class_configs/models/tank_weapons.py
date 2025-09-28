@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 from fight_simulator.class_configs.models.common_weapons import CommonWeaponStats
@@ -5,7 +7,7 @@ from fight_simulator.class_configs.models.common_weapons import CommonWeaponStat
 
 class TankWeaponStats(CommonWeaponStats):
     energy: int
-    threat_percent: int
+    threat_percent: Optional[int] = None
 
 
 class TankWeapons(BaseModel):
