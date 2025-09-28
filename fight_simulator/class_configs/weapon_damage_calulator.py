@@ -1,5 +1,8 @@
 from dataclasses import dataclass, fields
-from fight_simulator.class_configs.parse_fighter import get_fighter_info, CharacterEquipment, Weapon
+
+from fight_simulator.class_configs.loader.character_loader import CharacterEquipmentInfo
+from fight_simulator.class_configs.models.character import CharacterEquipment
+from fight_simulator.class_configs.models.common_weapons import CommonWeaponStats
 
 
 @dataclass
@@ -29,7 +32,7 @@ class BasicDamageCalculation:
 
 class FighterDamage(BasicDamageCalculation):
     def __init__(self):
-        self._fighter_info: CharacterEquipment = get_fighter_info()
+        self._fighter_info: CharacterEquipment = CharacterEquipmentInfo().get_fighter_info()
         self._player_stats: PlayerStats = self._setup_player_stats()
 
     def _setup_player_stats(self) -> PlayerStats:
@@ -45,7 +48,7 @@ class FighterDamage(BasicDamageCalculation):
 
         return player_stats
 
-    def _weapon_average_damage(self, weapon: Weapon, multiplier: int = 1, bleed_ticks: int = 0) -> float:
+    def _weapon_average_damage(self, weapon: CommonWeaponStats, multiplier: int = 1, bleed_ticks: int = 0) -> float:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
         avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)

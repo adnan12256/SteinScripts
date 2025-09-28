@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Optional, Dict
-from fight_simulator.class_configs.parse_fighter import get_fighter_info
 
 
 @dataclass
@@ -9,6 +8,7 @@ class Weapon:
     name: str
     dmg_low: int
     dmg_high: int
+    bonus_percent: int
     bonus_percent: int
     casttime: float
     cooldown: float
