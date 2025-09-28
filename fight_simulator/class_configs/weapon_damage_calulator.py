@@ -11,7 +11,7 @@ class PlayerStats:
     energy_regen: float = 2.0
     mana_regen: float = 3.2
     life: int = 0
-    life_regen: float = 4.0   # changed to float for consistency
+    life_regen: float = 4.0
 
 
 class BasicDamageCalculation:
