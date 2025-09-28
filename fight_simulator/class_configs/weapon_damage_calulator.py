@@ -14,7 +14,7 @@ class PlayerStats:
 
 class BasicDamageCalculation:
     @staticmethod
-    def average_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
+    def _average_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
         wep_bonus = wep_bonus / 100
         critical_rate = 1 - 0.99**(player_stats.ccr/(0.5*1.05**(30-1)))
         critical_bonus = 0.25 + (player_stats.cbr / (0.5 * 1.05**(30-1))) / 100
@@ -26,12 +26,12 @@ class BasicDamageCalculation:
 class FighterDamage(BasicDamageCalculation):
     def __init__(self):
         super().__init__()
-        self.fighter_info: CharacterEquipment = get_fighter_info()
-        self.player_stats: PlayerStats = self.setup_player_stats()
+        self._fighter_info: CharacterEquipment = get_fighter_info()
+        self._player_stats: PlayerStats = self.setup_player_stats()
 
     def setup_player_stats(self) -> PlayerStats:
         player_stats = PlayerStats()
-        for field, armor_piece_stats in self.fighter_info.armor:
+        for field, armor_piece_stats in self._fighter_info.armor:
             player_stats.armor += armor_piece_stats.armor if armor_piece_stats.armor else 0
             player_stats.cbr += armor_piece_stats.cbr if armor_piece_stats.cbr else 0
             player_stats.ccr += armor_piece_stats.ccr if armor_piece_stats.ccr else 0
@@ -43,41 +43,41 @@ class FighterDamage(BasicDamageCalculation):
 
         return player_stats
 
-    def repeater_average_damage(self):
-        base_damage = self.fighter_info.weapons.repeater.regular_damage_lower + self.fighter_info.weapons.repeater.regular_damage_higher / 2
-        average_damage = self.average_damage(self.player_stats, base_damage, self.fighter_info.weapons.repeater.regular_damage_bonus_percent)
+    def repeater_average_damage(self) -> float:
+        base_damage = self._fighter_info.weapons.repeater.regular_damage_lower + self._fighter_info.weapons.repeater.regular_damage_higher / 2
+        average_damage = self._average_damage(self._player_stats, base_damage, self._fighter_info.weapons.repeater.regular_damage_bonus_percent)
         return average_damage
 
-    def cleaving_strike_average_damage(self):
-        base_damage = self.fighter_info.weapons.cleaving_strike.regular_damage_lower + self.fighter_info.weapons.cleaving_strike.regular_damage_higher / 2
-        average_damage = self.average_damage(self.player_stats, base_damage, self.fighter_info.weapons.cleaving_strike.regular_damage_bonus_percent)
+    def cleaving_strike_average_damage(self) -> float:
+        base_damage = self._fighter_info.weapons.cleaving_strike.regular_damage_lower + self._fighter_info.weapons.cleaving_strike.regular_damage_higher / 2
+        average_damage = self._average_damage(self._player_stats, base_damage, self._fighter_info.weapons.cleaving_strike.regular_damage_bonus_percent)
         return average_damage
 
-    def reckless_slam_average_damage(self):
-        base_damage = self.fighter_info.weapons.reckless_slam.regular_damage_lower + self.fighter_info.weapons.reckless_slam.regular_damage_higher / 2
-        average_damage = self.average_damage(self.player_stats, base_damage, self.fighter_info.weapons.reckless_slam.regular_damage_bonus_percent)
+    def reckless_slam_average_damage(self) -> float:
+        base_damage = self._fighter_info.weapons.reckless_slam.regular_damage_lower + self._fighter_info.weapons.reckless_slam.regular_damage_higher / 2
+        average_damage = self._average_damage(self._player_stats, base_damage, self._fighter_info.weapons.reckless_slam.regular_damage_bonus_percent)
 
-        bleed_base_damage = self.fighter_info.weapons.reckless_slam.bleed_damage
-        bleed_wep_bonus = self.fighter_info.weapons.reckless_slam.bleed_bonus
-        bleed_average_damage = self.average_damage(self.player_stats, bleed_base_damage, bleed_wep_bonus)
+        bleed_base_damage = self._fighter_info.weapons.reckless_slam.bleed_damage
+        bleed_wep_bonus = self._fighter_info.weapons.reckless_slam.bleed_bonus
+        bleed_average_damage = self._average_damage(self._player_stats, bleed_base_damage, bleed_wep_bonus)
         total_bleed_average_damage = bleed_average_damage * 5
 
         return average_damage + total_bleed_average_damage
 
-    def breaker_average_damage(self):
-        base_damage = self.fighter_info.weapons.breaker.regular_damage_lower + self.fighter_info.weapons.breaker.regular_damage_higher / 2
-        average_damage = self.average_damage(self.player_stats, base_damage, self.fighter_info.weapons.breaker.regular_damage_bonus_percent)
+    def breaker_average_damage(self) -> float:
+        base_damage = self._fighter_info.weapons.breaker.regular_damage_lower + self._fighter_info.weapons.breaker.regular_damage_higher / 2
+        average_damage = self._average_damage(self._player_stats, base_damage, self._fighter_info.weapons.breaker.regular_damage_bonus_percent)
         total_average_damage = average_damage * 4
         return total_average_damage
 
-    def shiver_average_damage(self):
-        base_damage = self.fighter_info.weapons.shiver.regular_damage_lower + self.fighter_info.weapons.shiver.regular_damage_higher / 2
-        average_damage = self.average_damage(self.player_stats, base_damage, self.fighter_info.weapons.shiver.regular_damage_bonus_percent)
+    def shiver_average_damage(self) -> float:
+        base_damage = self._fighter_info.weapons.shiver.regular_damage_lower + self._fighter_info.weapons.shiver.regular_damage_higher / 2
+        average_damage = self._average_damage(self._player_stats, base_damage, self._fighter_info.weapons.shiver.regular_damage_bonus_percent)
         return average_damage
 
-    def tear_average_damage(self):
-        base_damage = self.fighter_info.weapons.tear.regular_damage_lower + self.fighter_info.weapons.tear.regular_damage_higher / 2
-        average_damage = self.average_damage(self.player_stats, base_damage, self.fighter_info.weapons.tear.regular_damage_bonus_percent)
+    def tear_average_damage(self) -> float:
+        base_damage = self._fighter_info.weapons.tear.regular_damage_lower + self._fighter_info.weapons.tear.regular_damage_higher / 2
+        average_damage = self._average_damage(self._player_stats, base_damage, self._fighter_info.weapons.tear.regular_damage_bonus_percent)
         total_average_damage = average_damage * 4
         return total_average_damage
 
