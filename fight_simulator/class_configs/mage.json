@@ -54,49 +54,55 @@
       "regular_damage_bonus_percent": 15,
       "casttime_s": 1.0,
       "cooldown_s": 1.0,
-      "energy": 0
+      "mana": 0
     },
-    "cleaving strike": {
-      "regular_damage_lower": 114,
-      "regular_damage_higher": 211,
-      "regular_damage_bonus_percent": 80,
-      "casttime_s": 0.3,
-      "cooldown_s": 6,
-      "energy": 6
-    },
-    "risato": {
-      "regular_damage_lower": 65,
-      "regular_damage_higher": 120,
-      "regular_damage_bonus_percent": 65,
-      "bleed_damage": 19,
-      "bleed_bonus": 13,
-      "casttime_s": 0.3,
-      "cooldown_s": 6,
-      "energy": 10
-    },
-    "breaker": {
-      "regular_damage_lower": 40,
-      "regular_damage_higher": 75,
-      "regular_damage_bonus_percent": 38,
-      "casttime_s": 0.6,
-      "cooldown_s": 7.2,
-      "energy": 15
-    },
-    "shiver": {
-      "regular_damage_lower": 226,
-      "regular_damage_higher": 419,
+    "fireball": {
+      "regular_damage_lower": 123,
+      "regular_damage_higher": 230,
       "regular_damage_bonus_percent": 100,
-      "casttime_s": 0.3,
-      "cooldown_s": 20,
-      "energy": 6
+      "casttime_s": 0.8,
+      "cooldown_s": 4,
+      "mana": 41
     },
-    "tear": {
-      "regular_damage_lower": 88,
-      "regular_damage_higher": 165,
-      "regular_damage_bonus_percent": 50,
-      "casttime_s": 0.6,
-      "cooldown_s": 9,
-      "energy": 6
+    "flamestrike": {
+      "regular_damage_lower": 317,
+      "regular_damage_higher": 588,
+      "regular_damage_bonus_percent": 130,
+      "casttime_s": 1.5,
+      "cooldown_s": 8,
+      "mana": 68
+    },
+    "fire_bomb": {
+      "regular_damage_lower": 226,
+      "regular_damage_higher": 421,
+      "regular_damage_bonus_percent": 150,
+      "casttime_s": 1.2,
+      "cooldown_s": 10,
+      "mana": 82
+    },
+    "sunfire": {
+      "regular_damage_lower": 503,
+      "regular_damage_higher": 934,
+      "regular_damage_bonus_percent": 200,
+      "casttime_s": 1.0,
+      "cooldown_s": 25,
+      "mana": 72
+    },
+    "flame_rush": {
+      "regular_damage_lower": 227,
+      "regular_damage_higher": 422,
+      "regular_damage_bonus_percent": 100,
+      "casttime_s": 1.0,
+      "cooldown_s": 20,
+      "energy": 41
+    },
+    "flame_rush_legacy": {
+      "regular_damage_lower": 48,
+      "regular_damage_higher": 48,
+      "regular_damage_bonus_percent": 10,
+      "casttime_s": 0.84,
+      "cooldown_s": 51.95,
+      "mana": 49
     }
   }
 }
