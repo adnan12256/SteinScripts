@@ -5,6 +5,7 @@ from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
 from fight_simulator.class_configs.models.mage_weapons import MageWeaponStats
 from fight_simulator.class_configs.models.tank_weapons import TankWeaponStats
+from fight_simulator.class_configs.models.warlock_weapons import WarlockWeaponStats
 
 
 @dataclass
@@ -150,6 +151,31 @@ class TankDamage(BasicDamageCalculation, CharacterEquipArmor):
         return self._weapon_average_damage(self._tank_info.weapons.warstrike_legacy)
 
 
+class WarlockDamage(BasicDamageCalculation, CharacterEquipArmor):
+    def __init__(self):
+        self._warlock_info: CharacterEquipment = CharacterFactory().get_warlock_info()
+        self._player_stats: PlayerStats = self._setup_player_stats(self._warlock_info)
+
+    def _weapon_average_damage(self, weapon: WarlockWeaponStats, multiplier: int = 1) -> float:
+        # Average base damage between lower and higher
+        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        return round(avg_damage * multiplier, 3)
+
+    # Define specific moves using the generic helper
+    def repeater_average_damage(self) -> float:
+        return self._weapon_average_damage(self._warlock_info.weapons.repeater)
+
+    def void_hex_average_damage(self) -> float:
+        return self._weapon_average_damage(self._warlock_info.weapons.void_hex, multiplier=5)
+
+    def life_burn_average_damage(self) -> float:
+        return self._weapon_average_damage(self._warlock_info.weapons.life_burn, multiplier=3)
+
+    def sacrifice_average_damage(self) -> float:
+        return self._weapon_average_damage(self._warlock_info.weapons.sacrifice, multiplier=3)
+
+
 if __name__ == "__main__":
     fighter_damage = FighterDamage()
     print("Fighter:")
@@ -178,3 +204,10 @@ if __name__ == "__main__":
     print(f"Distract Average Damage: {tank_damage.distract_average_damage()}")
     print(f"Impale Average Damage: {tank_damage.impale_average_damage()}")
     print(f"Warstrike Average Damage: {tank_damage.warstrike_average_damage()}")
+
+    warlock_damage = WarlockDamage()
+    print("\nWarlock:")
+    print(f"Repeater Average Damage: {warlock_damage.repeater_average_damage()}")
+    print(f"Void hex Average Damage: {warlock_damage.void_hex_average_damage()}")
+    print(f"Life burn Average Damage: {warlock_damage.life_burn_average_damage()}")
+    print(f"Sacrifice Average Damage: {warlock_damage.sacrifice_average_damage()}")
