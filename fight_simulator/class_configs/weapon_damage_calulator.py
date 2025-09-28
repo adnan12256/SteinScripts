@@ -31,23 +31,25 @@ class BasicDamageCalculation:
         return (effective_damage * (1 + critical_bonus) * critical_rate) + (effective_damage * (1 - critical_rate))
 
 
-class FighterDamage(BasicDamageCalculation):
-    def __init__(self):
-        self._fighter_info: CharacterEquipment = CharacterFactory().get_fighter_info()
-        self._player_stats: PlayerStats = self._setup_player_stats()
-
-    def _setup_player_stats(self) -> PlayerStats:
+class CharacterEquipArmor:
+    @staticmethod
+    def _setup_player_stats(character_equipment: CharacterEquipment) -> PlayerStats:
         player_stats = PlayerStats()
 
         # Loop over all defined stats in PlayerStats instead of hardcoding
-        for _, armor_piece_stats in self._fighter_info.armor:
+        for _, armor_piece_stats in character_equipment.armor:
             for field in fields(PlayerStats):
                 name = field.name
                 # getattr with default 0 if the attribute doesn't exist on armor_piece_stats
                 value = getattr(armor_piece_stats, name, 0)
                 setattr(player_stats, name, getattr(player_stats, name) + (value or 0))
-
         return player_stats
+
+
+class FighterDamage(BasicDamageCalculation, CharacterEquipArmor):
+    def __init__(self):
+        self._fighter_info: CharacterEquipment = CharacterFactory().get_fighter_info()
+        self._player_stats: PlayerStats = self._setup_player_stats(self._fighter_info)
 
     def _weapon_average_damage(self, weapon: FighterWeaponStats, multiplier: int = 1, bleed_ticks: int = 0) -> float:
         # Average base damage between lower and higher
@@ -82,23 +84,10 @@ class FighterDamage(BasicDamageCalculation):
         return self._weapon_average_damage(self._fighter_info.weapons.tear, multiplier=4)
 
 
-class MageDamage(BasicDamageCalculation):
+class MageDamage(BasicDamageCalculation, CharacterEquipArmor):
     def __init__(self):
         self._mage_info: CharacterEquipment = CharacterFactory().get_mage_info()
-        self._player_stats: PlayerStats = self._setup_player_stats()
-
-    def _setup_player_stats(self) -> PlayerStats:
-        player_stats = PlayerStats()
-
-        # Loop over all defined stats in PlayerStats instead of hardcoding
-        for _, armor_piece_stats in self._mage_info.armor:
-            for field in fields(PlayerStats):
-                name = field.name
-                # getattr with default 0 if the attribute doesn't exist on armor_piece_stats
-                value = getattr(armor_piece_stats, name, 0)
-                setattr(player_stats, name, getattr(player_stats, name) + (value or 0))
-
-        return player_stats
+        self._player_stats: PlayerStats = self._setup_player_stats(self._mage_info)
 
     def _weapon_average_damage(self, weapon: MageWeaponStats, multiplier: int = 1) -> float:
         # Average base damage between lower and higher
