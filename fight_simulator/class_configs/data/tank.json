@@ -1,0 +1,99 @@
+{
+  "armor": {
+    "head": {
+      "armor": 120,
+      "life": 489,
+      "life_regen": 2.4,
+      "damage": 14
+    },
+    "chest": {
+      "armor": 242,
+      "energy_regen": 1.1,
+      "life_regen": 2.4,
+      "life": 974
+    },
+    "legs": {
+      "armor": 155,
+      "energy_regen": 10.7,
+      "damage": 19,
+      "life": 629
+    },
+    "shoulders": {
+      "armor": 115,
+      "cdr": 7,
+      "life_regen": 2.6,
+      "life": 483
+    },
+    "gloves": {
+      "armor": 82,
+      "cdr": 5,
+      "energy_regen": 0.4,
+      "damage": 10,
+      "life_regen": 1.8,
+      "life": 363
+    },
+    "boots": {
+      "armor": 84,
+      "cdr": 5,
+      "energy_regen": 0.4,
+      "damage": 10,
+      "life_regen": 1.7,
+      "life": 360
+    }
+  },
+  "weapons":{
+    "repeater": {
+      "regular_damage_lower": 10,
+      "regular_damage_higher": 19,
+      "regular_damage_bonus_percent": 15,
+      "casttime_s": 0.6,
+      "cooldown_s": 0.6,
+      "energy": 0
+    },
+    "execute": {
+      "regular_damage_lower": 55,
+      "regular_damage_higher": 102,
+      "regular_damage_bonus_percent": 80,
+      "threat_percent": 145,
+      "casttime_s": 0.6,
+      "cooldown_s": 3,
+      "energy": 6
+    },
+    "roar": {
+      "regular_damage_lower": 70,
+      "regular_damage_higher": 130,
+      "regular_damage_bonus_percent": 130,
+      "threat_percent": 179,
+      "casttime_s": 0.6,
+      "cooldown_s": 4.8,
+      "energy": 8
+    },
+    "distract": {
+      "regular_damage_lower": 66,
+      "regular_damage_higher": 123,
+      "regular_damage_bonus_percent": 150,
+      "threat_percent": 234,
+      "casttime_s": 0.6,
+      "cooldown_s": 6,
+      "energy": 10
+    },
+    "impale": {
+      "regular_damage_lower": 89,
+      "regular_damage_higher": 166,
+      "regular_damage_bonus_percent": 100,
+      "threat_percent": 514,
+      "casttime_s": 0.6,
+      "cooldown_s": 40,
+      "energy": 10
+    },
+    "warstrike_legacy": {
+      "regular_damage_lower": 94,
+      "regular_damage_higher": 175,
+      "regular_damage_bonus_percent": 100,
+      "threat_percent": 150,
+      "casttime_s": 0.48,
+      "cooldown_s": 14.4,
+      "energy": 5
+    }
+  }
+}
