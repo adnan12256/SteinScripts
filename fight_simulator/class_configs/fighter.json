@@ -3,41 +3,41 @@
     "head": {
       "armor": 41,
       "cbr": 27,
-      "death damage": 41,
-      "energy regen": 0.5
+      "damage": 29,
+      "energy_regen": 0.5
     },
     "chest": {
       "armor": 78,
-      "death damage": 58,
-      "energy regen": 1.1,
+      "damage": 58,
+      "energy_regen": 1.1,
       "life": 506
     },
     "legs": {
       "armor": 55,
       "cbr": 36,
-      "death damage": 37,
+      "damage": 37,
       "life": 332
     },
     "shoulders": {
       "armor": 40,
       "ccr": 10,
-      "death damage": 29,
-      "energy regen": 0.5
+      "damage": 29,
+      "energy_regen": 0.5
     },
     "gloves": {
       "armor": 29,
       "ccr": 7,
       "cbr": 20,
-      "death damage": 21,
-      "energy regen": 0.4,
+      "damage": 21,
+      "energy_regen": 0.4,
       "life": 189
     },
     "boots": {
       "armor": 29,
       "ccr": 7,
       "cbr": 20,
-      "death damage": 21,
-      "energy regen": 0.4,
+      "damage": 21,
+      "energy_regen ": 0.4,
       "life": 198
     }
   },

@@ -3,26 +3,7 @@ from pathlib import Path
 from typing import Optional, Dict
 from pydantic import BaseModel, Field
 
-
-class ArmorPiece(BaseModel):
-    armor: int
-    cbr: Optional[int] = None
-    ccr: Optional[int] = None
-    death_damage: Optional[int] = Field(None, alias="death damage")
-    energy_regen: Optional[float] = Field(None, alias="energy regen")
-    life: Optional[int] = None
-
-    class Config:
-        populate_by_name = True
-
-
-class Armor(BaseModel):
-    head: ArmorPiece
-    chest: ArmorPiece
-    legs: ArmorPiece
-    shoulders: ArmorPiece
-    gloves: ArmorPiece
-    boots: ArmorPiece
+from fight_simulator.class_configs.parse_common_info import Armor
 
 
 class Weapon(BaseModel):
