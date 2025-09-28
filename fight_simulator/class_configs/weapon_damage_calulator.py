@@ -3,6 +3,7 @@ from dataclasses import dataclass, fields
 from fight_simulator.class_configs.loader.character_loader import CharacterFactory
 from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
+from fight_simulator.class_configs.models.mage_weapons import MageWeaponStats
 
 
 @dataclass
@@ -81,11 +82,69 @@ class FighterDamage(BasicDamageCalculation):
         return self._weapon_average_damage(self._fighter_info.weapons.tear, multiplier=4)
 
 
+class MageDamage(BasicDamageCalculation):
+    def __init__(self):
+        self._mage_info: CharacterEquipment = CharacterFactory().get_mage_info()
+        self._player_stats: PlayerStats = self._setup_player_stats()
+
+    def _setup_player_stats(self) -> PlayerStats:
+        player_stats = PlayerStats()
+
+        # Loop over all defined stats in PlayerStats instead of hardcoding
+        for _, armor_piece_stats in self._mage_info.armor:
+            for field in fields(PlayerStats):
+                name = field.name
+                # getattr with default 0 if the attribute doesn't exist on armor_piece_stats
+                value = getattr(armor_piece_stats, name, 0)
+                setattr(player_stats, name, getattr(player_stats, name) + (value or 0))
+
+        return player_stats
+
+    def _weapon_average_damage(self, weapon: MageWeaponStats, multiplier: int = 1) -> float:
+        # Average base damage between lower and higher
+        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        return round(avg_damage * multiplier, 3)
+
+    # Define specific moves using the generic helper
+    def repeater_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.repeater)
+
+    def fireball_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.fireball)
+
+    def flamestrike_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.flamestrike)
+
+    def firebomb_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.fire_bomb)
+
+    def sunfire_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.sunfire, multiplier=5)
+
+    def flamerush_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.flame_rush)
+
+    def flamerush_legacy_average_damage(self) -> float:
+        return self._weapon_average_damage(self._mage_info.weapons.flame_rush_legacy, multiplier=10)
+
+
 if __name__ == "__main__":
-    a = FighterDamage()
-    print(f"Repeater Average Damage: {a.repeater_average_damage()}")
-    print(f"Cleaving Strike Average Damage: {a.cleaving_strike_average_damage()}")
-    print(f"Reckless Slam Average Damage: {a.reckless_slam_average_damage()}")
-    print(f"Breaker Average Damage: {a.breaker_average_damage()}")
-    print(f"Shiver Average Damage: {a.shiver_average_damage()}")
-    print(f"Tear Average Damage: {a.tear_average_damage()}")
+    fighter_damage = FighterDamage()
+    print("Fighter:")
+    print(f"Repeater Average Damage: {fighter_damage.repeater_average_damage()}")
+    print(f"Cleaving Strike Average Damage: {fighter_damage.cleaving_strike_average_damage()}")
+    print(f"Reckless Slam Average Damage: {fighter_damage.reckless_slam_average_damage()}")
+    print(f"Breaker Average Damage: {fighter_damage.breaker_average_damage()}")
+    print(f"Shiver Average Damage: {fighter_damage.shiver_average_damage()}")
+    print(f"Tear Average Damage: {fighter_damage.tear_average_damage()}")
+
+    mage_damage = MageDamage()
+    print("\nMage:")
+    print(f"Repeater Average Damage: {mage_damage.repeater_average_damage()}")
+    print(f"Fireball Strike Average Damage: {mage_damage.fireball_average_damage()}")
+    print(f"Flamestrike Average Damage: {mage_damage.flamestrike_average_damage()}")
+    print(f"Firebomb Average Damage: {mage_damage.firebomb_average_damage()}")
+    print(f"Sunfire Average Damage: {mage_damage.sunfire_average_damage()}")
+    print(f"Flamerush Average Damage: {mage_damage.flamerush_average_damage()}")
+    print(f"Flamerush Legacy Average Damage: {mage_damage.flamerush_legacy_average_damage()}")
