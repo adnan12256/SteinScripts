@@ -3,6 +3,7 @@ from dataclasses import dataclass, fields
 from fight_simulator.class_configs.loader.character_loader import CharacterFactory
 from fight_simulator.class_configs.models.character import CharacterEquipment
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
+from fight_simulator.class_configs.models.healer_weapons import HealerWeaponStats
 from fight_simulator.class_configs.models.hunter_weapons import HunterWeaponStats
 from fight_simulator.class_configs.models.mage_weapons import MageWeaponStats
 from fight_simulator.class_configs.models.shaman_weapons import ShamanWeaponStats
@@ -37,13 +38,17 @@ class BasicHealDamageCalculation:
         return (effective_damage * (1 + critical_bonus) * critical_rate) + (effective_damage * (1 - critical_rate))
 
     @staticmethod
-    def _average_heal(player_stats: PlayerStats, base_heal: float, wep_bonus: float) -> float:
+    def _average_heal(player_stats: PlayerStats, base_heal: float, wep_bonus: float, disable_crit: bool = False) -> float:
         wep_bonus /= 100
         # Critical chance formula
         critical_rate = 1 - 0.99 ** (player_stats.ccr / (0.5 * 1.05 ** (30 - 1)))
         critical_bonus = 0.25 + (player_stats.cbr / (0.5 * 1.05 ** (30 - 1))) / 100
         # Base + armor scaling
         effective_heal = base_heal + player_stats.heal * wep_bonus
+
+        if disable_crit:
+            return effective_heal
+
         # Weighted average of crit vs non-crit
         return (effective_heal * (1 + critical_bonus) * critical_rate) + (effective_heal * (1 - critical_rate))
 
@@ -263,35 +268,36 @@ class HunterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
 
 class HealerHeal(BasicHealDamageCalculation, CharacterEquipArmor):
     def __init__(self):
-        self._healer_info: CharacterEquipment = CharacterFactory().get_hunter_info()
+        self._healer_info: CharacterEquipment = CharacterFactory().get_healer_info()
         self._player_stats: PlayerStats = self._setup_player_stats(self._healer_info)
 
-    def _weapon_average_damage(self, weapon: HunterWeaponStats, multiplier: int = 1, bonus_percent: int = 0) -> float:
-        wep_bonus = weapon.regular_damage_bonus_percent
-        if bonus_percent > 0:
-            wep_bonus = weapon.regular_damage_bonus_percent + bonus_percent
-
+    def _weapon_average_heal(self, weapon: HealerWeaponStats, multiplier: int = 1, disable_crit: bool = False) -> float:
         # Average base damage between lower and higher
-        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_damage(self._player_stats, base_damage, wep_bonus)
-
+        base_heal = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_heal(self._player_stats, base_heal, weapon.regular_damage_bonus_percent, disable_crit=disable_crit)
         return round(avg_damage * multiplier, 3)
 
     # Define specific moves using the generic helper
-    def repeater_average_damage(self) -> float:
-        return self._weapon_average_damage(self._hunter_info.weapons.repeater)
+    def repeater_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.repeater)
 
-    def powerful_shot_average_damage(self) -> float:
-        return self._weapon_average_damage(self._hunter_info.weapons.powerful_shot)
+    def restoration_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.restoration)
 
-    def arrow_hail_average_damage(self) -> float:
-        return self._weapon_average_damage(self._hunter_info.weapons.arrow_hail)
+    def blessing_legacy_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.blessing_legacy, multiplier=5)
 
-    def toxic_shot_average_damage(self) -> float:
-        return self._weapon_average_damage(self._hunter_info.weapons.toxic_shot)
+    def blessing_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.blessing, multiplier=4)
 
-    def multi_shot_average_damage(self) -> float:
-        return self._weapon_average_damage(self._hunter_info.weapons.multi_shot, bonus_percent=24)
+    def holy_barrage_legacy_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.holy_barrage_legacy, multiplier=5)
+
+    def eviction_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.eviction, disable_crit=True)
+
+    def life_burst_average_heal(self) -> float:
+        return self._weapon_average_heal(self._healer_info.weapons.life_burst, multiplier=5)
 
 
 if __name__ == "__main__":
@@ -346,3 +352,13 @@ if __name__ == "__main__":
     print(f"Arrow Hail Average Damage: {hunter_damage.arrow_hail_average_damage()}")
     print(f"Toxic Shot Average Damage: {hunter_damage.toxic_shot_average_damage()}")
     print(f"Multi Shot Average Damage: {hunter_damage.multi_shot_average_damage()}")
+
+    healer_damage = HealerHeal()
+    print("\nHealer:")
+    print(f"Repeater Average Heal: {healer_damage.repeater_average_heal()}")
+    print(f"Restoration Average Heal: {healer_damage.restoration_average_heal()}")
+    print(f"Blessings Legacy Average Heal: {healer_damage.blessing_legacy_average_heal()}")
+    print(f"Blessings Average Heal: {healer_damage.blessing_average_heal()}")
+    print(f"Holy Barrage Average Heal: {healer_damage.holy_barrage_legacy_average_heal()}")
+    print(f"Eviction Average Heal: {healer_damage.eviction_average_heal()}")
+    print(f"Life Burst Legacy Average Heal: {healer_damage.life_burst_average_heal()}")

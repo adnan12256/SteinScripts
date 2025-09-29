@@ -9,12 +9,12 @@ class HealerWeaponStats(CommonWeaponStats):
 
 class HealerWeapons(BaseModel):
     repeater: HealerWeaponStats
-    fireball: HealerWeaponStats
-    flamestrike: HealerWeaponStats
-    fire_bomb: HealerWeaponStats
-    sunfire: HealerWeaponStats
-    flame_rush: HealerWeaponStats
-    flame_rush_legacy: HealerWeaponStats
+    restoration: HealerWeaponStats
+    blessing_legacy: HealerWeaponStats
+    blessing: HealerWeaponStats
+    holy_barrage_legacy: HealerWeaponStats
+    eviction: HealerWeaponStats
+    life_burst: HealerWeaponStats
 
     class Config:
         populate_by_name = True
