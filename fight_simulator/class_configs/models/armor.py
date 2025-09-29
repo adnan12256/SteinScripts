@@ -13,6 +13,7 @@ class ArmorPiece(BaseModel):
     mana_regen: Optional[float] = None
     life_regen: Optional[float] = None
     life: Optional[int] = None
+    heal: Optional[int] = None
 
     class Config:
         populate_by_name = True

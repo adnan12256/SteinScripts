@@ -15,16 +15,18 @@ class PlayerStats:
     armor: int = 0
     cbr: int = 0
     ccr: int = 0
+    cdr: int = 0
     damage: int = 0
     energy_regen: float = 2.0
     mana_regen: float = 3.2
-    life: int = 0
     life_regen: float = 4.0
+    life: int = 0
+    heal: int = 0
 
 
 class BasicHealDamageCalculation:
     @staticmethod
-    def _average_heal_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
+    def _average_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
         wep_bonus /= 100
         # Critical chance formula
         critical_rate = 1 - 0.99 ** (player_stats.ccr / (0.5 * 1.05 ** (30 - 1)))
@@ -33,6 +35,17 @@ class BasicHealDamageCalculation:
         effective_damage = base_damage + player_stats.damage * wep_bonus
         # Weighted average of crit vs non-crit
         return (effective_damage * (1 + critical_bonus) * critical_rate) + (effective_damage * (1 - critical_rate))
+
+    @staticmethod
+    def _average_heal(player_stats: PlayerStats, base_heal: float, wep_bonus: float) -> float:
+        wep_bonus /= 100
+        # Critical chance formula
+        critical_rate = 1 - 0.99 ** (player_stats.ccr / (0.5 * 1.05 ** (30 - 1)))
+        critical_bonus = 0.25 + (player_stats.cbr / (0.5 * 1.05 ** (30 - 1))) / 100
+        # Base + armor scaling
+        effective_heal = base_heal + player_stats.heal * wep_bonus
+        # Weighted average of crit vs non-crit
+        return (effective_heal * (1 + critical_bonus) * critical_rate) + (effective_heal * (1 - critical_rate))
 
 
 class CharacterEquipArmor:
@@ -58,12 +71,12 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def _weapon_average_damage(self, weapon: FighterWeaponStats, multiplier: int = 1, bleed_ticks: int = 0) -> float:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_heal_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
 
         # Handle bleed if applicable
         total_bleed_damage = 0
         if hasattr(weapon, "bleed_damage") and bleed_ticks > 0:
-            bleed_avg = self._average_heal_damage(self._player_stats, weapon.bleed_damage, weapon.bleed_bonus)
+            bleed_avg = self._average_damage(self._player_stats, weapon.bleed_damage, weapon.bleed_bonus)
             total_bleed_damage = bleed_avg * bleed_ticks
 
         return round(avg_damage * multiplier + total_bleed_damage, 3)
@@ -96,7 +109,7 @@ class MageDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def _weapon_average_damage(self, weapon: MageWeaponStats, multiplier: int = 1) -> float:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_heal_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
         return round(avg_damage * multiplier, 3)
 
     # Define specific moves using the generic helper
@@ -130,7 +143,7 @@ class TankDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def _weapon_average_damage(self, weapon: TankWeaponStats, multiplier: int = 1) -> float:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_heal_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
         return round(avg_damage * multiplier, 3)
 
     # Define specific moves using the generic helper
@@ -161,7 +174,7 @@ class WarlockDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def _weapon_average_damage(self, weapon: WarlockWeaponStats, multiplier: int = 1) -> float:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_heal_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
         return round(avg_damage * multiplier, 3)
 
     # Define specific moves using the generic helper
@@ -186,12 +199,12 @@ class ShamanDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def _weapon_average_damage(self, weapon: ShamanWeaponStats, multiplier: int = 1) -> float:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_heal_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
 
         backward_damage = 0
         if hasattr(weapon, "backward_damage_lower") and weapon.backward_damage_lower is not None:
             backward_base_damage = (weapon.backward_damage_lower + weapon.backward_damage_higher) / 2
-            backward_damage = self._average_heal_damage(self._player_stats, backward_base_damage, weapon.backward_damage_bonus_percent)
+            backward_damage = self._average_damage(self._player_stats, backward_base_damage, weapon.backward_damage_bonus_percent)
 
         return round(avg_damage * multiplier + backward_damage, 3)
 
@@ -227,7 +240,40 @@ class HunterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
 
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
-        avg_damage = self._average_heal_damage(self._player_stats, base_damage, wep_bonus)
+        avg_damage = self._average_damage(self._player_stats, base_damage, wep_bonus)
+
+        return round(avg_damage * multiplier, 3)
+
+    # Define specific moves using the generic helper
+    def repeater_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.repeater)
+
+    def powerful_shot_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.powerful_shot)
+
+    def arrow_hail_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.arrow_hail)
+
+    def toxic_shot_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.toxic_shot)
+
+    def multi_shot_average_damage(self) -> float:
+        return self._weapon_average_damage(self._hunter_info.weapons.multi_shot, bonus_percent=24)
+
+
+class HealerHeal(BasicHealDamageCalculation, CharacterEquipArmor):
+    def __init__(self):
+        self._healer_info: CharacterEquipment = CharacterFactory().get_hunter_info()
+        self._player_stats: PlayerStats = self._setup_player_stats(self._healer_info)
+
+    def _weapon_average_damage(self, weapon: HunterWeaponStats, multiplier: int = 1, bonus_percent: int = 0) -> float:
+        wep_bonus = weapon.regular_damage_bonus_percent
+        if bonus_percent > 0:
+            wep_bonus = weapon.regular_damage_bonus_percent + bonus_percent
+
+        # Average base damage between lower and higher
+        base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+        avg_damage = self._average_damage(self._player_stats, base_damage, wep_bonus)
 
         return round(avg_damage * multiplier, 3)
 

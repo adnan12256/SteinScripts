@@ -29,6 +29,9 @@ class CharacterFactory:
     def get_hunter_info(self) -> CharacterEquipment:
         return self._parse_character_info(Path(__file__).parent.parent / "data" / "hunter.json")
 
+    def get_healer_info(self) -> CharacterEquipment:
+        return self._parse_character_info(Path(__file__).parent.parent / "data" / "healer.json")
+
 
 if __name__ == '__main__':
     equipment_info = CharacterFactory()
@@ -38,4 +41,5 @@ if __name__ == '__main__':
     d = equipment_info.get_warlock_info()
     e = equipment_info.get_shaman_info()
     f = equipment_info.get_hunter_info()
+    g = equipment_info.get_healer_info()
     print(1)
