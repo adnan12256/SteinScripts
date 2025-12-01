@@ -258,6 +258,10 @@ class CombatReporter:
         fig.show()
 
 
+def trying_somthing():
+    print("I am trying something now")
+
+
 if __name__ == '__main__':
     json_file_location: str | Path = input("Enter Path to the fight-log.json file or press ENTER to use default path: ")
     if not json_file_location:
