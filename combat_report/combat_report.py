@@ -258,6 +258,10 @@ class CombatReporter:
         fig.show()
 
 
+def trying_somthing():
+    print("I am trying something now")
+
+
 if __name__ == '__main__':
     json_file_location: str | Path = input("Enter Path to the fight-log.json file or press ENTER to use default path: ")
     if not json_file_location:
@@ -286,3 +290,4 @@ if __name__ == '__main__':
     print(f"Total Duration player below {report.critical_hp_threshold}HP= {report.player_time_below_20_in_combat}")
     print(f"Over Heal Map (Broken) = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
+
