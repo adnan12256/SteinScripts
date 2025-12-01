@@ -286,3 +286,4 @@ if __name__ == '__main__':
     print(f"Total Duration player below {report.critical_hp_threshold}HP= {report.player_time_below_20_in_combat}")
     print(f"Over Heal Map (Broken) = {report.player_overheal_in_combat}")
     print(f"HP At Fight End Map (Only players that were attacked or healed)= {report.player_current_hp_in_combat}")
+
