@@ -1,0 +1,5 @@
+- Have a dictionary of bosses name and hp
+- input desired kill time
+- plugin party configuration
+- using the inputs, give a dps spread for each of the party members. Make dps configurable
+  for some of the party members for example, healer dps and/or specific player dps
