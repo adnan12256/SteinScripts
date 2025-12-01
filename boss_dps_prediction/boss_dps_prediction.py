@@ -63,6 +63,7 @@ if __name__ == '__main__':
         "Serezith Brakrud": 515_000,
     }
 
+    # None means dps will be calculated and split evenly after the known dps is computed.
     player_dps_dict = {
         "Player1": 0,
         "Player2": 0,
