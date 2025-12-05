@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPS Calculator (Browser)</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:0}
+    body{padding:24px;background:#f5f7fb;color:#0f172a}
+    h1{font-size:20px;margin-bottom:8px}
+    .card{background:#fff;border-radius:10px;box-shadow:0 6px 20px rgba(12,20,40,0.08);padding:16px;margin-bottom:16px}
+    label{display:block;margin-bottom:6px;font-weight:600}
+    input[type=number]{width:160px;padding:8px;border-radius:6px;border:1px solid #d1d5db}
+    button{padding:8px 12px;border-radius:8px;border:0;background:#111827;color:#fff;cursor:pointer}
+    .boss-block{margin-top:12px}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:8px;border-bottom:1px solid #e6eef7;text-align:left}
+    th{background:#fbfdff;color:#0b1220;font-weight:700}
+    .muted{color:#6b7280}
+    .warning{color:#b45309}
+    .fixed-dps{font-weight:600}
+    .note{margin-top:6px;font-size:13px}
+    .row-actions{display:flex;gap:8px}
+    .small{font-size:13px}
+    .players-edit input{width:110px}
+    @media (max-width:640px){body{padding:12px}}
+  </style>
+</head>
+<body>
+  <h1>DPS Calculator — HTML version</h1>
+  <div class="card">
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div>
+        <label for="desiredTime">Desired completion time (seconds)</label>
+        <input id="desiredTime" type="number" min="1" value="300" />
+      </div>
+      <div style="margin-top:20px">
+        <button id="calcBtn">Calculate</button>
+      </div>
+    </div>
+    <div class="note muted">Edit player DPS values (use blank / empty to mean unknown). Known 0 DPS is treated as fixed 0.</div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin:0;font-size:16px">Players</h2>
+    <div class="players-edit" style="margin-top:8px">
+      <table id="playersTable">
+        <thead>
+          <tr><th>Player</th><th>DPS (known)</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="results" class="card">
+    <h2 style="margin:0;font-size:16px">Results</h2>
+    <div id="resultsInner" style="margin-top:8px">Run a calculation to see results per boss.</div>
+  </div>
+
+<script>
+// Initial data ported from the Python script
+const bossNameHpMap = {
+  "Garub": 140000,
+  "Inachaus": 170000,
+  "Black'ist": 210000,
+  "Trenun": 260000,
+  "Sedulus Rane": 415000,
+  "Serezith Brakrud": 515000
+};
+
+const playerDpsDict = {
+  "Player1": 0,
+  "Player2": 0,
+  "Player3": 200,
+  "Player4": null,
+  "Player5": null
+};
+
+// Simple classes to mirror the Python structure
+class Boss {
+  constructor(name, hp){ this.name = name; this.hp = hp; }
+}
+class Player {
+  constructor(name, dps){ this.name = name; this.dps = dps; }
+}
+
+class DpsCalculator {
+  constructor(bosses, players){
+    this.bosses = Object.entries(bosses).map(([n,h]) => new Boss(n,h));
+    this.players = Object.entries(players).map(([n,d]) => new Player(n, d));
+  }
+
+  calculateForAllBosses(desiredCompletionTime){
+    return this.bosses.map(boss => ({
+      boss: boss,
+      result: this.calculateSingleBoss(boss, desiredCompletionTime)
+    }));
+  }
+
+  calculateSingleBoss(boss, desiredCompletionTime){
+    const requiredTotalDps = boss.hp / desiredCompletionTime;
+    const fixedDps = this.players.reduce((acc,p) => acc + ( (p.dps !== null && p.dps !== undefined) ? Number(p.dps) : 0), 0);
+    const unknownPlayers = this.players.filter(p => p.dps === null || p.dps === undefined || p.dps === "");
+    const remainingDps = requiredTotalDps - fixedDps;
+
+    // Prepare return object with details
+    const details = {
+      requiredTotalDps,
+      fixedDps,
+      unknownCount: unknownPlayers.length,
+      remainingDps,
+      sharePerPlayer: null,
+      notes: [] ,
+      players: []
+    };
+
+    if(remainingDps < 0){
+      details.notes.push('⚠ Fixed DPS already exceeds required amount.');
+      // still list fixed players
+    }
+    if(unknownPlayers.length === 0){
+      details.notes.push('⚠ No unknown players left to distribute DPS.');
+    }
+    if(remainingDps >= 0 && unknownPlayers.length > 0){
+      details.sharePerPlayer = remainingDps / unknownPlayers.length;
+    }
+
+    // player outputs
+    for(const p of this.players){
+      if(p.dps !== null && p.dps !== undefined && p.dps !== ""){
+        details.players.push({name: p.name, dps: Number(p.dps), type: 'fixed'});
+      } else {
+        const share = details.sharePerPlayer === null ? null : details.sharePerPlayer;
+        details.players.push({name: p.name, dps: share, type: 'calculated'});
+      }
+    }
+
+    return details;
+  }
+}
+
+// DOM helpers
+const playersTableBody = document.querySelector('#playersTable tbody');
+const resultsInner = document.getElementById('resultsInner');
+
+function renderPlayersEditable(players){
+  playersTableBody.innerHTML = '';
+  for(const [name, dps] of Object.entries(players)){
+    const tr = document.createElement('tr');
+    const tdName = document.createElement('td'); tdName.textContent = name;
+    const tdInput = document.createElement('td');
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.placeholder = 'leave blank = unknown';
+    input.value = (dps === null || dps === undefined) ? '' : dps;
+    input.dataset.playerName = name;
+    tdInput.appendChild(input);
+    tr.appendChild(tdName); tr.appendChild(tdInput);
+    playersTableBody.appendChild(tr);
+  }
+}
+
+function readPlayersFromDOM(){
+  const inputs = playersTableBody.querySelectorAll('input');
+  const obj = {};
+  inputs.forEach(inp => {
+    const name = inp.dataset.playerName;
+    const val = inp.value;
+    if(val === '' || val === null){ obj[name] = null; }
+    else { obj[name] = Number(val); }
+  });
+  return obj;
+}
+
+function formatNumber(n){
+  if(n === null || n === undefined || Number.isNaN(n)) return '-';
+  if(!Number.isFinite(n)) return String(n);
+  // show 1 decimal place for fractional DPS, integers without decimals if whole
+  return (Math.abs(n - Math.round(n)) < 1e-9) ? n.toLocaleString() : n.toFixed(1).toLocaleString();
+}
+
+function renderResults(results){
+  resultsInner.innerHTML = '';
+  for(const item of results){
+    const boss = item.boss;
+    const res = item.result;
+
+    const block = document.createElement('div');
+    block.className = 'boss-block';
+
+    const title = document.createElement('div');
+    title.innerHTML = `<strong>Boss:</strong> ${boss.name} <span class="muted">(HP: ${boss.hp.toLocaleString()})</span>`;
+    block.appendChild(title);
+
+    const info = document.createElement('div');
+    info.innerHTML = `<div class="small"><strong>Required total DPS:</strong> ${formatNumber(res.requiredTotalDps)}</div>`;
+    block.appendChild(info);
+
+    const tbl = document.createElement('table');
+    tbl.innerHTML = `<thead><tr><th>Player</th><th>DPS</th><th>Type</th></tr></thead>`;
+    const tbody = document.createElement('tbody');
+
+    for(const p of res.players){
+      const tr = document.createElement('tr');
+      const tdName = document.createElement('td'); tdName.textContent = p.name;
+      const tdDps = document.createElement('td'); tdDps.textContent = (p.dps === null ? '-' : formatNumber(p.dps));
+      if(p.type === 'fixed') tdDps.className = 'fixed-dps';
+      const tdType = document.createElement('td'); tdType.textContent = (p.type === 'fixed') ? 'Fixed' : 'Calculated (share)';
+      tr.appendChild(tdName); tr.appendChild(tdDps); tr.appendChild(tdType);
+      tbody.appendChild(tr);
+    }
+
+    tbl.appendChild(tbody);
+    block.appendChild(tbl);
+
+    if(res.notes.length){
+      const notes = document.createElement('div');
+      notes.className = 'note warning';
+      notes.textContent = res.notes.join(' ');
+      block.appendChild(notes);
+    }
+
+    resultsInner.appendChild(block);
+  }
+}
+
+// initial render
+renderPlayersEditable(playerDpsDict);
+
+// wire up button
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const timeInput = document.getElementById('desiredTime');
+  const time = Number(timeInput.value);
+  if(!time || time <= 0){ alert('Please enter a desired completion time in seconds (positive integer).'); return; }
+
+  const playersFromDom = readPlayersFromDOM();
+  const calc = new DpsCalculator(bossNameHpMap, playersFromDom);
+  const results = calc.calculateForAllBosses(time);
+  renderResults(results);
+});
+
+// allow pressing Enter when focused in number field
+document.getElementById('desiredTime').addEventListener('keydown', e => { if(e.key === 'Enter') document.getElementById('calcBtn').click(); });
+
+</script>
+</body>
+</html>
