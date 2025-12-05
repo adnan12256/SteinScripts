@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Party Role Randomizer (fixed)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui;padding:18px;background:#f5f7fb;color:#0f172a}
+    h1{font-size:22px;margin-bottom:8px}
+    .card{background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.06);margin-bottom:16px}
+    input,select{padding:6px 8px;border-radius:6px;border:1px solid #d1d5db}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}
+    button{padding:8px 14px;border:0;border-radius:8px;background:#111827;color:#fff;cursor:pointer;margin-top:10px}
+    .note{font-size:13px;color:#6b7280}
+    .muted{color:#6b7280}
+  </style>
+</head>
+<body>
+  <h1>Party Role Randomizer</h1>
+
+  <div class="card">
+    <h2 style="margin:0;font-size:16px">Player Names (max 5)</h2>
+    <p class="note">Leave fields empty if your party has fewer than 5 players.</p>
+    <table>
+      <tbody>
+        <tr><td>Player 1</td><td><input id="p1" /></td></tr>
+        <tr><td>Player 2</td><td><input id="p2" /></td></tr>
+        <tr><td>Player 3</td><td><input id="p3" /></td></tr>
+        <tr><td>Player 4</td><td><input id="p4" /></td></tr>
+        <tr><td>Player 5</td><td><input id="p5" /></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="margin:0;font-size:16px">Roles & Counts</h2>
+    <p class="note">Total selected must not exceed the number of players. The dropdown maxima update dynamically.</p>
+    <div class="muted">Players detected: <span id="playerCount">0</span></div>
+    <div style="height:10px"></div>
+    <table>
+      <thead><tr><th>Role</th><th>Count</th></tr></thead>
+      <tbody id="rolesTbl"></tbody>
+    </table>
+    <div style="margin-top:8px" class="muted">Remaining slots: <span id="remainingCount">0</span></div>
+  </div>
+
+  <button id="runBtn">Randomize</button>
+
+  <div class="card" style="margin-top:12px">
+    <h2 style="margin:0;font-size:16px">Result</h2>
+    <div id="result">No results yet.</div>
+  </div>
+
+<script>
+(function(){
+  const ROLES = ["Tank","Healer","Fighter","Mage","Warlock","Hunter"];
+  const rolesTbl = document.getElementById('rolesTbl');
+  const playerInputs = [1,2,3,4,5].map(i => document.getElementById('p'+i));
+  const playerCountSpan = document.getElementById('playerCount');
+  const remainingSpan = document.getElementById('remainingCount');
+
+  // Build role rows with selects
+  function buildRoleRows(){
+    rolesTbl.innerHTML = '';
+    ROLES.forEach(role=>{
+      const tr = document.createElement('tr');
+      const tdRole = document.createElement('td'); tdRole.textContent = role;
+      const tdCount = document.createElement('td');
+      const sel = document.createElement('select');
+      sel.className = 'role-count';
+      sel.dataset.role = role;
+      tdCount.appendChild(sel);
+      tr.appendChild(tdRole); tr.appendChild(tdCount);
+      rolesTbl.appendChild(tr);
+    });
+  }
+
+  function getPlayers(){
+    return playerInputs.map(inp => inp.value.trim()).filter(v => v);
+  }
+
+  function getTotalSelected(){
+    const selects = document.querySelectorAll('.role-count');
+    let sum = 0;
+    selects.forEach(s => sum += Number(s.value || 0));
+    return sum;
+  }
+
+  // Refresh all selects so that no combination can exceed player count
+  function refreshSelectOptions(){
+    const players = getPlayers();
+    const maxPlayers = players.length;
+    playerCountSpan.textContent = maxPlayers;
+
+    // current selections
+    const selects = Array.from(document.querySelectorAll('.role-count'));
+    const currentValues = selects.map(s => Number(s.value || 0));
+    const totalSelected = currentValues.reduce((a,b)=>a+b,0);
+    const remaining = Math.max(0, maxPlayers - totalSelected);
+
+    // For each select, allowed max is current + remaining
+    selects.forEach((sel, idx) =>{
+      const current = currentValues[idx];
+      const allowedMax = current + remaining; // cannot select more than this without exceeding players
+      // rebuild options 0..allowedMax
+      sel.innerHTML = '';
+      for(let v=0; v<=allowedMax; v++){
+        const opt = document.createElement('option'); opt.value = v; opt.textContent = v;
+        sel.appendChild(opt);
+      }
+      // restore previous value (or 0 if it was larger than allowedMax)
+      sel.value = Math.min(current, allowedMax);
+    });
+
+    // recompute remaining after clamps
+    const newTotal = Array.from(selects).reduce((a,s)=>a+Number(s.value||0),0);
+    remainingSpan.textContent = Math.max(0, maxPlayers - newTotal);
+  }
+
+  // Initialize
+  buildRoleRows();
+  refreshSelectOptions();
+
+  // Attach listeners: name inputs and selects
+  playerInputs.forEach(inp => inp.addEventListener('input', refreshSelectOptions));
+  rolesTbl.addEventListener('change', refreshSelectOptions);
+
+  // Randomization logic
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function runRandomize(){
+    const players = getPlayers();
+    const selects = Array.from(document.querySelectorAll('.role-count'));
+    const roleCounts = selects.map(s => ({role: s.dataset.role, count: Number(s.value||0)})).filter(r=>r.count>0);
+    const total = roleCounts.reduce((a,b)=>a+b.count,0);
+    const resultDiv = document.getElementById('result');
+
+    if(total === 0){ resultDiv.textContent = 'No roles selected.'; return; }
+    if(total > players.length){ resultDiv.textContent = '❌ More roles selected than players available.'; return; }
+
+    // build pool
+    let pool = [];
+    roleCounts.forEach(r => { for(let i=0;i<r.count;i++) pool.push(r.role); });
+
+    shuffle(players);
+    shuffle(pool);
+
+    // assign sequentially
+    let out = '';
+    for(let i=0;i<pool.length;i++){
+      out += `<div><strong>${players[i]}</strong> → ${pool[i]}</div>`;
+    }
+    resultDiv.innerHTML = out || 'No roles assigned.';
+  }
+
+  document.getElementById('runBtn').addEventListener('click', runRandomize);
+
+  // Expose for debugging if needed
+  window._rr = {refreshSelectOptions};
+})();
+</script>
+</body>
+</html>
