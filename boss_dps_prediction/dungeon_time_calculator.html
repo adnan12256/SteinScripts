@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dungeon Completion Time Calculator</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+  h1 { margin-bottom: 10px; }
+  .pull { background: white; padding: 12px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .row { display: flex; gap: 10px; margin-top: 6px; }
+  input[type="text"], input[type="number"] { padding: 6px; width: 140px; }
+  button { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; }
+  .add-btn { background: #2d8fdd; color: white; }
+  .remove-btn { background: #ff4d4d; color: white; }
+  #totalTime { font-size: 20px; margin-top: 15px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Dungeon Completion Time Calculator</h1>
+<button class="add-btn" onclick="addAction()">Add Dungeon Action</button>
+<div id="pullContainer"></div>
+<div id="totalTime">Total Time: 0s</div>
+
+<script>
+let actionId = 0;
+function addAction() {
+  actionId++;
+  const container = document.getElementById("pullContainer");
+
+  const div = document.createElement("div");
+  div.className = "pull";
+  div.dataset.id = actionId;
+
+  div.innerHTML = `
+    <div class="row">
+      <input type="text" placeholder="Dungeon Action Name" class="pull-name" />
+      <button class="remove-btn" onclick="removeAction(${actionId})">X</button>
+    </div>
+    <div class="row">
+      <input type="number" min="0" placeholder="Action Clear Time (s)" class="action-time" />
+      <input type="number" min="0" placeholder="Travel Time (s)" class="travel-time" />
+    </div>
+  `;
+
+  container.appendChild(div);
+  updateTotal();
+}
+
+function removeAction(id) {
+  const div = document.querySelector(`[data-id='${id}']`);
+  if (div) div.remove();
+  updateTotal();
+}
+
+document.addEventListener("input", updateTotal);
+
+function updateTotal() {
+  const actions = document.querySelectorAll(".pull");
+  let total = 0;
+
+  actions.forEach(p => {
+    const action = Number(p.querySelector('.action-time').value) || 0;
+    const travel = Number(p.querySelector('.travel-time').value) || 0;
+    total += action + travel;
+  });
+
+  document.getElementById("totalTime").textContent = `Total Time: ${total}s (${(total/60).toFixed(2)} min)`;
+}
+</script>
+</body>
+</html>
