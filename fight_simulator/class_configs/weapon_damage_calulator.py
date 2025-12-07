@@ -26,6 +26,12 @@ class PlayerStats:
     heal: int = 0
 
 
+@dataclass
+class DamageMetrics:
+    average_damage: float
+    regular_damage: float
+
+
 class BasicHealDamageCalculation:
     @staticmethod
     def _average_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
@@ -102,37 +108,46 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
         self._fighter_info: CharacterEquipment = CharacterFactory().get_fighter_info()
         self._player_stats: PlayerStats = self._setup_player_stats(self._fighter_info)
 
-    def _weapon_average_damage(self, weapon: FighterWeaponStats, multiplier: int = 1, bleed_ticks: int = 0) -> float:
+    def _weapon_damage_calculation(self, weapon: FighterWeaponStats, multiplier: int = 1, bleed_ticks: int = 0) -> DamageMetrics:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
+
         avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        reg_damage = self._calculate_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
 
         # Handle bleed if applicable
-        total_bleed_damage = 0
+        total_bleed_avg_damage = 0
+        total_bleed_calc_damage = 0
         if hasattr(weapon, "bleed_damage") and bleed_ticks > 0:
             bleed_avg = self._average_damage(self._player_stats, weapon.bleed_damage, weapon.bleed_bonus)
-            total_bleed_damage = bleed_avg * bleed_ticks
+            total_bleed_avg_damage = bleed_avg * bleed_ticks
 
-        return round(avg_damage * multiplier + total_bleed_damage, 3)
+            bleed_calc = self._calculate_damage(self._player_stats, weapon.bleed_damage, weapon.bleed_bonus)
+            total_bleed_calc_damage = bleed_calc * bleed_ticks
+
+        average_damage = round(avg_damage * multiplier + total_bleed_avg_damage, 3)
+        regular_damage = round(reg_damage * multiplier + total_bleed_calc_damage, 3)
+
+        return DamageMetrics(average_damage=average_damage, regular_damage=regular_damage)
 
     # Define specific moves using the generic helper
-    def repeater_average_damage(self) -> float:
-        return self._weapon_average_damage(self._fighter_info.weapons.repeater)
+    def repeater_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self._fighter_info.weapons.repeater)
 
-    def cleaving_strike_average_damage(self) -> float:
-        return self._weapon_average_damage(self._fighter_info.weapons.cleaving_strike)
+    def cleaving_strike_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self._fighter_info.weapons.cleaving_strike)
 
-    def reckless_slam_average_damage(self) -> float:
-        return self._weapon_average_damage(self._fighter_info.weapons.reckless_slam, bleed_ticks=5)
+    def reckless_slam_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self._fighter_info.weapons.reckless_slam, bleed_ticks=5)
 
-    def breaker_average_damage(self) -> float:
-        return self._weapon_average_damage(self._fighter_info.weapons.breaker, multiplier=4)
+    def breaker_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self._fighter_info.weapons.breaker, multiplier=4)
 
-    def shiver_average_damage(self) -> float:
-        return self._weapon_average_damage(self._fighter_info.weapons.shiver)
+    def shiver_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self._fighter_info.weapons.shiver)
 
-    def tear_average_damage(self) -> float:
-        return self._weapon_average_damage(self._fighter_info.weapons.tear, multiplier=4)
+    def tear_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self._fighter_info.weapons.tear, multiplier=4)
 
 
 class MageDamage(BasicHealDamageCalculation, CharacterEquipArmor):
@@ -332,12 +347,12 @@ class HealerHeal(BasicHealDamageCalculation, CharacterEquipArmor):
 if __name__ == "__main__":
     fighter_damage = FighterDamage()
     print("Fighter:")
-    print(f"Repeater Average Damage: {fighter_damage.repeater_average_damage()}")
-    print(f"Cleaving Strike Average Damage: {fighter_damage.cleaving_strike_average_damage()}")
-    print(f"Reckless Slam Average Damage: {fighter_damage.reckless_slam_average_damage()}")
-    print(f"Breaker Average Damage: {fighter_damage.breaker_average_damage()}")
-    print(f"Shiver Average Damage: {fighter_damage.shiver_average_damage()}")
-    print(f"Tear Average Damage: {fighter_damage.tear_average_damage()}")
+    print(f"Repeater Average Damage: {fighter_damage.repeater_damage().average_damage}")
+    print(f"Cleaving Strike Average Damage: {fighter_damage.cleaving_strike_damage().average_damage}")
+    print(f"Reckless Slam Average Damage: {fighter_damage.reckless_slam_damage().average_damage}")
+    print(f"Breaker Average Damage: {fighter_damage.breaker_damage().average_damage}")
+    print(f"Shiver Average Damage: {fighter_damage.shiver_damage().average_damage}")
+    print(f"Tear Average Damage: {fighter_damage.tear_damage().average_damage}")
 
     mage_damage = MageDamage()
     print("\nMage:")
