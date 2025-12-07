@@ -24,6 +24,9 @@ class PlayerStats:
     life_regen: float = 4.0
     life: int = 0
     heal: int = 0
+    energy: int = 100
+    mana: int = 317
+
 
 
 @dataclass
@@ -105,24 +108,24 @@ class CharacterEquipArmor:
 
 class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def __init__(self):
-        self._fighter_info: CharacterEquipment = CharacterFactory().get_fighter_info()
-        self._player_stats: PlayerStats = self._setup_player_stats(self._fighter_info)
+        self.fighter_info: CharacterEquipment = CharacterFactory().get_fighter_info()
+        self.player_stats: PlayerStats = self._setup_player_stats(self.fighter_info)
 
     def _weapon_damage_calculation(self, weapon: FighterWeaponStats, multiplier: int = 1, bleed_ticks: int = 0) -> DamageMetrics:
         # Average base damage between lower and higher
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
 
-        avg_damage = self._average_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
-        reg_damage = self._calculate_damage(self._player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        avg_damage = self._average_damage(self.player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        reg_damage = self._calculate_damage(self.player_stats, base_damage, weapon.regular_damage_bonus_percent)
 
         # Handle bleed if applicable
         total_bleed_avg_damage = 0
         total_bleed_calc_damage = 0
         if hasattr(weapon, "bleed_damage") and bleed_ticks > 0:
-            bleed_avg = self._average_damage(self._player_stats, weapon.bleed_damage, weapon.bleed_bonus)
+            bleed_avg = self._average_damage(self.player_stats, weapon.bleed_damage, weapon.bleed_bonus)
             total_bleed_avg_damage = bleed_avg * bleed_ticks
 
-            bleed_calc = self._calculate_damage(self._player_stats, weapon.bleed_damage, weapon.bleed_bonus)
+            bleed_calc = self._calculate_damage(self.player_stats, weapon.bleed_damage, weapon.bleed_bonus)
             total_bleed_calc_damage = bleed_calc * bleed_ticks
 
         average_damage = round(avg_damage * multiplier + total_bleed_avg_damage, 3)
@@ -132,22 +135,22 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
 
     # Define specific moves using the generic helper
     def repeater_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self._fighter_info.weapons.repeater)
+        return self._weapon_damage_calculation(self.fighter_info.weapons.repeater)
 
     def cleaving_strike_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self._fighter_info.weapons.cleaving_strike)
+        return self._weapon_damage_calculation(self.fighter_info.weapons.cleaving_strike)
 
     def reckless_slam_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self._fighter_info.weapons.reckless_slam, bleed_ticks=5)
+        return self._weapon_damage_calculation(self.fighter_info.weapons.reckless_slam, bleed_ticks=5)
 
     def breaker_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self._fighter_info.weapons.breaker, multiplier=4)
+        return self._weapon_damage_calculation(self.fighter_info.weapons.breaker, multiplier=4)
 
     def shiver_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self._fighter_info.weapons.shiver)
+        return self._weapon_damage_calculation(self.fighter_info.weapons.shiver)
 
     def tear_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self._fighter_info.weapons.tear, multiplier=4)
+        return self._weapon_damage_calculation(self.fighter_info.weapons.tear, multiplier=4)
 
 
 class MageDamage(BasicHealDamageCalculation, CharacterEquipArmor):

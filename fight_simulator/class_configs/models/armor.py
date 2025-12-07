@@ -14,6 +14,8 @@ class ArmorPiece(BaseModel):
     life_regen: Optional[float] = None
     life: Optional[int] = None
     heal: Optional[int] = None
+    energy: Optional[int] = None
+    mana: Optional[int] = None
 
     class Config:
         populate_by_name = True
