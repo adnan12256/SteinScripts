@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass, fields
 
 from fight_simulator.class_configs.loader.character_loader import CharacterFactory
@@ -51,6 +52,34 @@ class BasicHealDamageCalculation:
 
         # Weighted average of crit vs non-crit
         return (effective_heal * (1 + critical_bonus) * critical_rate) + (effective_heal * (1 - critical_rate))
+
+    @staticmethod
+    def _calculate_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
+        wep_bonus /= 100
+        # Critical chance formula
+        critical_rate = 1 - 0.99 ** (player_stats.ccr / (0.5 * 1.05 ** (30 - 1)))
+        critical_bonus = 0.25 + (player_stats.cbr / (0.5 * 1.05 ** (30 - 1))) / 100
+
+        # Base + armor scaling
+        effective_damage = base_damage + player_stats.damage * wep_bonus * round(random.uniform(0.7, 1.3), 3)
+
+        # Crit or non crit hit
+        return effective_damage * critical_bonus if random.randint(1, 100) <= critical_rate else effective_damage
+
+    @staticmethod
+    def _calculate_heal(player_stats: PlayerStats, base_heal: float, wep_bonus: float, disable_crit: bool = False) -> float:
+        wep_bonus /= 100
+        # Critical chance formula
+        critical_rate = 1 - 0.99 ** (player_stats.ccr / (0.5 * 1.05 ** (30 - 1)))
+        critical_bonus = 0.25 + (player_stats.cbr / (0.5 * 1.05 ** (30 - 1))) / 100
+        # Base + armor scaling
+        effective_heal = base_heal + player_stats.heal * wep_bonus * round(random.uniform(0.7, 1.3), 3)
+
+        if disable_crit:
+            return effective_heal
+
+        # Weighted average of crit vs non-crit
+        return effective_heal * critical_bonus if random.randint(1, 100) <= critical_rate else effective_heal
 
 
 class CharacterEquipArmor:
