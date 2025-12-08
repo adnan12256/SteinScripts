@@ -69,11 +69,11 @@ while time < duration:
                 match weapon.name:
                     case "energy":
                         player_energy += weapon.resource
-                        player_energy = round(min(100, player_energy), 3)
+                        player_energy = round(min(max_energy, player_energy), 3)
                         print(f"Energy pot used. Player energy: {player_energy}")
                     case "mana":
                         player_mana += weapon.resource
-                        player_mana = round(min(100, player_mana), 3)
+                        player_mana = round(min(max_mana, player_mana), 3)
                         print(f"Mana pot used. Player mana: {player_mana}")
 
                 cooldowns[wep_name] = weapon.cooldown + weapon.cast_time
