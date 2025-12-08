@@ -11,7 +11,7 @@ energy_regen_per_sec = fighter_handle.player_stats.energy_regen
 mana_regen_per_sec = fighter_handle.player_stats.mana_regen
 max_energy = fighter_handle.player_stats.energy
 max_mana = fighter_handle.player_stats.mana
-duration = 130  # simulate 20 seconds
+duration = 120  # simulate 20 seconds
 tick = 0.1  # tick resolution (0.1s)
 
 # Runtime state

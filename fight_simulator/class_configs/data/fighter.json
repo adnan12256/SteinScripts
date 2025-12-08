@@ -56,7 +56,7 @@
       "regular_damage_bonus_percent": 80,
       "casttime_s": 0.3,
       "cooldown_s": 6,
-      "energy": 6
+      "energy": 7
     },
     "reckless slam": {
       "regular_damage_lower": 65,
@@ -66,7 +66,7 @@
       "bleed_bonus": 13,
       "casttime_s": 0.3,
       "cooldown_s": 6,
-      "energy": 10
+      "energy": 11
     },
     "breaker": {
       "regular_damage_lower": 40,
@@ -74,7 +74,7 @@
       "regular_damage_bonus_percent": 38,
       "casttime_s": 0.6,
       "cooldown_s": 7.2,
-      "energy": 15
+      "energy": 16
     },
     "shiver": {
       "regular_damage_lower": 226,
@@ -82,7 +82,7 @@
       "regular_damage_bonus_percent": 100,
       "casttime_s": 0.3,
       "cooldown_s": 20,
-      "energy": 6
+      "energy": 7
     },
     "tear": {
       "regular_damage_lower": 88,
@@ -90,7 +90,7 @@
       "regular_damage_bonus_percent": 50,
       "casttime_s": 0.6,
       "cooldown_s": 9,
-      "energy": 6
+      "energy": 7
     },
     "cata_staff": {
       "regular_damage_lower": 68,
