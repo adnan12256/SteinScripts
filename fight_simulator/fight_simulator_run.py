@@ -5,12 +5,20 @@ from typing import Dict
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
 from fight_simulator.class_configs.weapon_damage_calulator import FighterDamage
 
+
 @dataclasses.dataclass
 class Pot:
     name: str
     resource: int
     cooldown: float
     cast_time: float
+
+
+@dataclasses.dataclass
+class StatusEffects:
+    name: str
+    start_time: Decimal
+    end_time: Decimal
 
 
 fighter_handle = FighterDamage()
@@ -36,7 +44,6 @@ weapons_in_use: dict[str, FighterWeaponStats | Pot] = {
     "cata_staff": fighter_handle.fighter_info.weapons.cata_staff,
     "energy_pot": Pot(name="energy", resource=20, cooldown=60, cast_time=0.5),
 }
-
 weapons_damage: dict[str, float] = {
     "repeater": 0,
     "cleaving_strike": 0,
@@ -46,7 +53,7 @@ weapons_damage: dict[str, float] = {
     "shiver": 0,
     "cata_staff": 0,
 }
-
+status_effects: list[StatusEffects] = []
 
 cooldowns: Dict[str, float] = {w: 0.0 for w in weapons_in_use}
 time = Decimal("0.0")
@@ -60,6 +67,11 @@ while time < duration:
         player_mana = round(min([max_mana, player_mana + mana_regen_per_sec]), 3)
         print(f"New energy {player_energy}")
         print(f"New mana {player_mana}")
+
+        if len(status_effects) > 0:
+            for effect in status_effects[:]:
+                if time > effect.end_time:
+                    status_effects.remove(effect)
 
     # try to attack (priority order)
     for wep_name, weapon in weapons_in_use.items():
@@ -102,8 +114,15 @@ while time < duration:
                         dmg = fighter_handle.cleaving_strike_damage().regular_damage
                     case "reckless_slam":
                         dmg = fighter_handle.reckless_slam_damage().regular_damage
+                        status_effects.append(StatusEffects(name="bleed", start_time=time, end_time=time + 5))
                     case "breaker":
-                        dmg = fighter_handle.breaker_damage().regular_damage
+                        for status_effect in status_effects:
+                            if status_effect.name == "bleed":
+                                dmg = fighter_handle.breaker_damage(bleed_bonus=True).regular_damage
+                                break
+                        else:
+                            dmg = fighter_handle.breaker_damage(bleed_bonus=False).regular_damage
+
                     case "tear":
                         dmg = fighter_handle.tear_damage().regular_damage
                     case "shiver":
