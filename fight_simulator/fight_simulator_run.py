@@ -44,6 +44,7 @@ time = Decimal("0.0")
 print("=== Combat Simulation Start ===")
 
 while time < duration:
+    # Every second it updated mana/energy
     if time % 1 == 0:
         player_energy = round(min([max_energy, player_energy + energy_regen_per_sec]), 3)
         player_mana = round(min([max_mana, player_mana + mana_regen_per_sec]), 3)
