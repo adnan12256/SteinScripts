@@ -1,173 +1,280 @@
+from __future__ import annotations
 import dataclasses
 from decimal import Decimal
-from typing import Dict
+from typing import Dict, List, Optional, Callable, Any
 
+# External dependency
 from fight_simulator.class_configs.models.fighter_weapons import FighterWeaponStats
 from fight_simulator.class_configs.weapon_damage_calulator import FighterDamage
 
 
-@dataclasses.dataclass
-class Pot:
-    name: str
-    resource: int
-    cooldown: float
-    cast_time: float
-
+# =====================================================
+# ===============   Status Effects   ==================
+# =====================================================
 
 @dataclasses.dataclass
-class StatusEffects:
+class StatusEffect:
     name: str
     start_time: Decimal
     end_time: Decimal
 
+    def is_active(self, now: Decimal) -> bool:
+        return self.start_time <= now <= self.end_time
 
-fighter_handle = FighterDamage()
 
-# Simulation settings
-energy_regen_per_sec = fighter_handle.player_stats.energy_regen
-mana_regen_per_sec = fighter_handle.player_stats.mana_regen
-max_energy = fighter_handle.player_stats.energy
-max_mana = fighter_handle.player_stats.mana
-duration = 125  # simulate 20 seconds
-tick = 0.1  # tick resolution (0.1s)
+# =====================================================
+# ==================   Actions   ======================
+# =====================================================
 
-# Runtime state
-player_energy = max_energy
-player_mana = max_mana
-weapons_in_use: dict[str, FighterWeaponStats | Pot] = {
-    "repeater": fighter_handle.fighter_info.weapons.repeater,
-    "cleaving_strike": fighter_handle.fighter_info.weapons.cleaving_strike,
-    "reckless_slam": fighter_handle.fighter_info.weapons.reckless_slam,
-    "breaker": fighter_handle.fighter_info.weapons.breaker,
-    "tear": fighter_handle.fighter_info.weapons.tear,
-    "shiver": fighter_handle.fighter_info.weapons.shiver,
-    "cata_staff": fighter_handle.fighter_info.weapons.cata_staff,
-    "energy_pot": Pot(name="energy", resource=20, cooldown=60, cast_time=0.5),
-}
-weapons_damage: dict[str, float] = {
-    "repeater": 0,
-    "cleaving_strike": 0,
-    "reckless_slam": 0,
-    "breaker": 0,
-    "tear": 0,
-    "shiver": 0,
-    "cata_staff": 0,
-}
-weapons_count: dict[str, float] = {
-    "repeater": 0,
-    "cleaving_strike": 0,
-    "reckless_slam": 0,
-    "breaker": 0,
-    "tear": 0,
-    "shiver": 0,
-    "cata_staff": 0,
-}
-status_effects: list[StatusEffects] = []
+class BaseAction:
+    """Abstract parent for weapons, abilities, potions."""
+    name: str
+    cooldown: float
+    cast_time: float
 
-cooldowns: Dict[str, float] = {w: 0.0 for w in weapons_in_use}
-time = Decimal("0.0")
+    def __init__(self, name: str, cooldown: float, cast_time: float):
+        self.name = name
+        self.cooldown = cooldown
+        self.cast_time = cast_time
 
-print("=== Combat Simulation Start ===")
+    def can_use(self, player: "Player", now: Decimal, cooldown_remaining: float) -> bool:
+        return cooldown_remaining <= 0
 
-while time < duration:
-    # Every second it updated mana/energy
-    if time % 1 == 0:
-        player_energy = round(min([max_energy, player_energy + energy_regen_per_sec]), 3)
-        player_mana = round(min([max_mana, player_mana + mana_regen_per_sec]), 3)
-        print(f"New energy {player_energy}")
-        print(f"New mana {player_mana}")
+    def on_use(self, player: "Player", sim: "RotationSimulator", now: Decimal) -> float:
+        """Return damage dealt by this action."""
+        raise NotImplementedError
 
-        if len(status_effects) > 0:
-            for effect in status_effects[:]:
-                if time > effect.end_time:
-                    status_effects.remove(effect)
 
-    # try to attack (priority order)
-    for wep_name, weapon in weapons_in_use.items():
-        if cooldowns[wep_name] <= 0:
-            # Using Pot
-            if isinstance(weapon, Pot):
-                match weapon.name:
-                    case "energy":
-                        player_energy += weapon.resource
-                        player_energy = round(min(max_energy, player_energy), 3)
-                        print(f"Energy pot used. Player energy: {player_energy}")
-                    case "mana":
-                        player_mana += weapon.resource
-                        player_mana = round(min(max_mana, player_mana), 3)
-                        print(f"Mana pot used. Player mana: {player_mana}")
+class PotionAction(BaseAction):
+    def __init__(self, name: str, resource: int, cooldown: float, cast_time: float):
+        super().__init__(name, cooldown, cast_time)
+        self.resource = resource
 
-                cooldowns[wep_name] = weapon.cooldown + weapon.cast_time
-                continue
+    def on_use(self, player: "Player", sim: "RotationSimulator", now: Decimal) -> float:
+        if self.name == "energy":
+            player.energy = min(player.max_energy, player.energy + self.resource)
+        elif self.name == "mana":
+            player.mana = min(player.max_mana, player.mana + self.resource)
 
-            # Controlling mana/energy
-            enough_resource_to_use_skill = False
-            if weapon.energy is not None and player_energy >= weapon.energy:
-                player_energy -= weapon.energy
-                player_energy = round(max(0, player_energy), 3)
-                enough_resource_to_use_skill = True
-            if weapon.mana is not None and player_mana >= weapon.mana:
-                player_mana -= weapon.mana
-                player_mana = round(max(0, player_mana), 3)
-                enough_resource_to_use_skill = True
+        player.energy = round(player.energy, 3)
+        player.mana = round(player.mana, 3)
+        return 0.0  # potions do no damage
 
-            if enough_resource_to_use_skill:
-                # Updating weapon cooldowns
-                cooldowns[wep_name] = weapon.cooldown_s + weapon.casttime_s
 
-                # Updating weapon damage
-                match wep_name:
-                    case "repeater":
-                        dmg = fighter_handle.repeater_damage().regular_damage
-                    case "cleaving_strike":
-                        dmg = fighter_handle.cleaving_strike_damage().regular_damage
-                    case "reckless_slam":
-                        dmg = fighter_handle.reckless_slam_damage().regular_damage
-                        status_effects.append(StatusEffects(name="bleed", start_time=time, end_time=time + 5))
-                    case "breaker":
-                        for status_effect in status_effects:
-                            if status_effect.name == "bleed":
-                                dmg = fighter_handle.breaker_damage(bleed_bonus=True).regular_damage
-                                break
-                        else:
-                            dmg = fighter_handle.breaker_damage(bleed_bonus=False).regular_damage
+class WeaponAction(BaseAction):
+    """
+    Wrapper for real FighterWeaponStats abilities.
+    Delegates damage calculation to FighterDamage methods.
+    """
+    def __init__(
+        self,
+        name: str,
+        weapon_stats: FighterWeaponStats,
+        damage_fn: Callable[[], Any],
+        bleed_bonus_fn: Optional[Callable[[bool], Any]] = None,
+    ):
+        super().__init__(name, weapon_stats.cooldown_s, weapon_stats.casttime_s)
+        self.stats = weapon_stats
+        self.damage_fn = damage_fn
+        self.bleed_fn = bleed_bonus_fn
 
-                    case "tear":
-                        dmg = fighter_handle.tear_damage().regular_damage
-                    case "shiver":
-                        dmg = fighter_handle.shiver_damage().regular_damage
-                    case "cata_staff":
-                        dmg = fighter_handle.cata_staff_damage().regular_damage
-                    case _:
-                        raise ValueError("Unknown Wep Name")
-                weapons_damage[wep_name] += dmg
-                weapons_count[wep_name] += 1
-                print(f"{time:4.1f}s: Used {wep_name}, dealt {dmg}, energy left {player_energy:.1f}, mana left {player_mana}")
+    def can_use(self, player: "Player", now: Decimal, cooldown_remaining: float):
+        if cooldown_remaining > 0:
+            return False
 
-    # tick down cooldowns
-    for k in cooldowns:
-        cooldowns[k] = max([0, cooldowns[k] - 0.1])
+        # Check mana/energy
+        if self.stats.energy and player.energy < self.stats.energy:
+            return False
+        if self.stats.mana and player.mana < self.stats.mana:
+            return False
+        return True
 
-    time += Decimal(str(tick))
+    def on_use(self, player: "Player", sim: "RotationSimulator", now: Decimal) -> float:
+        # Spend resources
+        if self.stats.energy:
+            player.energy = max(0, round(player.energy - self.stats.energy, 3))
+        if self.stats.mana:
+            player.mana = max(0, round(player.mana - self.stats.mana, 3))
 
-print("\n=== COMBAT REPORT ===")
-total_dps = 0
-print(f"Fight Duration in seconds: {duration}")
-for wep, wep_damage in weapons_damage.items():
-    print(f"Weapon: {wep}")
-    dps = round(wep_damage / duration, 3)
-    total_dps += dps
-    print(f"DPS: {dps}")
+        # Damage logic
+        if self.name == "breaker":
+            has_bleed = sim.has_status("bleed", now)
+            dmg = (
+                self.bleed_fn(has_bleed).regular_damage
+                if self.bleed_fn else self.damage_fn().regular_damage
+            )
+        else:
+            dmg = self.damage_fn().regular_damage
 
-    if weapons_in_use[wep].energy is not None:
-        resource_cost = weapons_in_use[wep].energy
-    elif weapons_in_use[wep].mana is not None:
-        resource_cost = weapons_in_use[wep].mana
-    else:
-        resource_cost = 1
-    print(f"Wep Use Count: {weapons_count[wep]}")
-    print(f"DPS/resource_cost: {dps/(1 if resource_cost == 0 else resource_cost)}")
-    print(f"Efficiency ((DPS/Total Energy Used)*100): {(dps/(weapons_count[wep] * (1 if resource_cost == 0 else resource_cost)))*100}")
-    print("\n")
+        # Apply special effects
+        if self.name == "reckless_slam":
+            sim.add_status("bleed", now, now + 5)
 
-print(f"TOTAL DPS: {total_dps}")
+        return dmg
+
+
+# =====================================================
+# ===================   Player   ======================
+# =====================================================
+
+class Player:
+    def __init__(self, fighter_handle: FighterDamage):
+        stats = fighter_handle.player_stats
+        self.energy = stats.energy
+        self.mana = stats.mana
+        self.max_energy = stats.energy
+        self.max_mana = stats.mana
+        self.energy_regen = stats.energy_regen
+        self.mana_regen = stats.mana_regen
+
+    def regen(self):
+        self.energy = round(min(self.max_energy, self.energy + self.energy_regen), 3)
+        self.mana = round(min(self.max_mana, self.mana + self.mana_regen), 3)
+
+
+# =====================================================
+# ==============   Rotation Simulator   ===============
+# =====================================================
+
+class RotationSimulator:
+    def __init__(
+        self,
+        player: Player,
+        actions: Dict[str, BaseAction],
+        fight_duration: float = 120,
+        tick: float = 0.1,
+    ):
+        self.player = player
+        self.actions = actions
+        self.fight_duration = fight_duration
+        self.tick = tick
+
+        self.time = Decimal("0")
+        self.cooldowns: Dict[str, float] = {a: 0.0 for a in actions}
+        self.status_effects: List[StatusEffect] = []
+
+        # tracking
+        self.damage_by_action = {a: 0.0 for a in actions}
+        self.count_by_action = {a: 0 for a in actions}
+
+    # ----- Status Effect Helpers -----
+
+    def add_status(self, name: str, start: Decimal, end: Decimal):
+        self.status_effects.append(StatusEffect(name, start, end))
+
+    def has_status(self, name: str, now: Decimal) -> bool:
+        return any(s.name == name and s.is_active(now) for s in self.status_effects)
+
+    # ----- Simulation Core -----
+
+    def run(self):
+        print("=== Combat Simulation Start (OOP) ===")
+        while self.time < self.fight_duration:
+            now = self.time
+
+            # regen per 1 second
+            if now % 1 == 0:
+                self.player.regen()
+
+            # Remove expired effects
+            self.status_effects = [
+                s for s in self.status_effects if s.is_active(now)
+            ]
+
+            # Priority-based action loop
+            for name, action in self.actions.items():
+                if not action.can_use(self.player, now, self.cooldowns[name]):
+                    continue
+
+                dmg = action.on_use(self.player, self, now)
+
+                # Set cooldown
+                self.cooldowns[name] = action.cooldown + action.cast_time
+
+                # Track damage + count
+                self.damage_by_action[name] += dmg
+                self.count_by_action[name] += 1
+
+                break  # Only one action per tick
+
+            # Tick down cooldowns
+            for a in self.cooldowns:
+                self.cooldowns[a] = max(0, self.cooldowns[a] - self.tick)
+
+            # Advance time
+            self.time += Decimal(str(self.tick))
+
+        return self.build_report()
+
+    # ----- Report -----
+
+    def build_report(self):
+        total_dps = 0
+        report = {
+            "duration": self.fight_duration,
+            "actions": {},
+            "total_dps": 0
+        }
+
+        for name, dmg in self.damage_by_action.items():
+            dps = dmg / self.fight_duration
+            total_dps += dps
+
+            report["actions"][name] = {
+                "damage": dmg,
+                "dps": dps,
+                "count": self.count_by_action[name],
+            }
+
+        report["total_dps"] = total_dps
+        return report
+
+
+if __name__ == '__main__':
+    fighter_handle = FighterDamage()
+    player = Player(fighter_handle)
+
+    actions = {
+        "repeater": WeaponAction(
+            "repeater",
+            fighter_handle.fighter_info.weapons.repeater,
+            damage_fn=lambda: fighter_handle.repeater_damage(),
+        ),
+        "cleaving_strike": WeaponAction(
+            "cleaving_strike",
+            fighter_handle.fighter_info.weapons.cleaving_strike,
+            damage_fn=lambda: fighter_handle.cleaving_strike_damage(),
+        ),
+        "reckless_slam": WeaponAction(
+            "reckless_slam",
+            fighter_handle.fighter_info.weapons.reckless_slam,
+            damage_fn=lambda: fighter_handle.reckless_slam_damage(),
+        ),
+        "breaker": WeaponAction(
+            "breaker",
+            fighter_handle.fighter_info.weapons.breaker,
+            damage_fn=lambda: None,
+            bleed_bonus_fn=lambda bleed: fighter_handle.breaker_damage(bleed_bonus=bleed),
+        ),
+        "tear": WeaponAction(
+            "tear",
+            fighter_handle.fighter_info.weapons.tear,
+            damage_fn=lambda: fighter_handle.tear_damage(),
+        ),
+        "shiver": WeaponAction(
+            "shiver",
+            fighter_handle.fighter_info.weapons.shiver,
+            damage_fn=lambda: fighter_handle.shiver_damage(),
+        ),
+        "cata_staff": WeaponAction(
+            "cata_staff",
+            fighter_handle.fighter_info.weapons.cata_staff,
+            damage_fn=lambda: fighter_handle.cata_staff_damage(),
+        ),
+        "energy_pot": PotionAction("energy", resource=20, cooldown=60, cast_time=0.5),
+    }
+
+    sim = RotationSimulator(player, actions, fight_duration=125)
+    result = sim.run()
+
+    print(result)
