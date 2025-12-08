@@ -52,36 +52,39 @@ while time < duration:
     for wep_name, weapon in weapons_in_use.items():
         if cooldowns[wep_name] <= 0:
             # Controlling mana/energy
+            enough_resource_to_use_skill = False
             if hasattr(weapon, "energy") and player_energy >= weapon.energy:
                 player_energy -= weapon.energy
                 player_energy = max(0, player_energy)
+                enough_resource_to_use_skill = True
             if hasattr(weapon, "mana") and player_mana >= weapon.mana:
                 player_mana -= weapon.mana
                 player_mana = max(0, player_mana)
+                enough_resource_to_use_skill = True
 
-            # Updating weapon cooldowns
-            cooldowns[wep_name] = weapon.cooldown_s + weapon.casttime_s
+            if enough_resource_to_use_skill:
+                # Updating weapon cooldowns
+                cooldowns[wep_name] = weapon.cooldown_s + weapon.casttime_s
 
-            # Updating weapon damage
-            match wep_name:
-                case "repeater":
-                    dmg = fighter_handle.repeater_damage().regular_damage
-                case "cleaving_strike":
-                    dmg = fighter_handle.cleaving_strike_damage().regular_damage
-                case "reckless_slam":
-                    dmg = fighter_handle.reckless_slam_damage().regular_damage
-                case "breaker":
-                    dmg = fighter_handle.breaker_damage().regular_damage
-                case "tear":
-                    dmg = fighter_handle.tear_damage().regular_damage
-                case "shiver":
-                    dmg = fighter_handle.shiver_damage().regular_damage
-                case _:
-                    raise ValueError("Unknown Wep Name")
-            weapons_damage[wep_name] += dmg
+                # Updating weapon damage
+                match wep_name:
+                    case "repeater":
+                        dmg = fighter_handle.repeater_damage().regular_damage
+                    case "cleaving_strike":
+                        dmg = fighter_handle.cleaving_strike_damage().regular_damage
+                    case "reckless_slam":
+                        dmg = fighter_handle.reckless_slam_damage().regular_damage
+                    case "breaker":
+                        dmg = fighter_handle.breaker_damage().regular_damage
+                    case "tear":
+                        dmg = fighter_handle.tear_damage().regular_damage
+                    case "shiver":
+                        dmg = fighter_handle.shiver_damage().regular_damage
+                    case _:
+                        raise ValueError("Unknown Wep Name")
+                weapons_damage[wep_name] += dmg
 
-            print(f"{time:4.1f}s: Used {wep_name}, dealt {dmg}, energy left {player_energy:.1f}")
-            break
+                print(f"{time:4.1f}s: Used {wep_name}, dealt {dmg}, energy left {player_energy:.1f}")
 
     # tick down cooldowns
     for k in cooldowns:
