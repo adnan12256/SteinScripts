@@ -147,8 +147,14 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def reckless_slam_damage(self) -> DamageMetrics:
         return self._weapon_damage_calculation(self.fighter_info.weapons.reckless_slam, bleed_ticks=5)
 
-    def breaker_damage(self) -> DamageMetrics:
-        return self._weapon_damage_calculation(self.fighter_info.weapons.breaker, multiplier=4)
+    def breaker_damage(self, bleed_bonus: bool = False) -> DamageMetrics:
+        if bleed_bonus:
+            without_bleed = self._weapon_damage_calculation(self.fighter_info.weapons.breaker, multiplier=3)
+            with_bleed_avg = self._weapon_damage_calculation(self.fighter_info.weapons.breaker, multiplier=1).average_damage * 2
+            with_bleed_calculated = self._weapon_damage_calculation(self.fighter_info.weapons.breaker, multiplier=1).regular_damage * 2
+            return DamageMetrics(average_damage=without_bleed.average_damage + with_bleed_avg, regular_damage=without_bleed.regular_damage + with_bleed_calculated)
+        else:
+            return self._weapon_damage_calculation(self.fighter_info.weapons.breaker, multiplier=4)
 
     def shiver_damage(self) -> DamageMetrics:
         return self._weapon_damage_calculation(self.fighter_info.weapons.shiver)
