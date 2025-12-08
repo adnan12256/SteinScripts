@@ -63,7 +63,7 @@ class BasicHealDamageCalculation:
         return (effective_heal * (1 + critical_bonus) * critical_rate) + (effective_heal * (1 - critical_rate))
 
     @staticmethod
-    def _calculate_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float) -> float:
+    def _calculate_damage(player_stats: PlayerStats, base_damage: float, wep_bonus: float, hit_chance_percent: float) -> float:
         wep_bonus /= 100
         # Critical chance formula
         critical_rate = 1 - 0.99 ** (player_stats.ccr / (0.5 * 1.05 ** (30 - 1)))
@@ -72,8 +72,12 @@ class BasicHealDamageCalculation:
         # Base + armor scaling
         effective_damage = base_damage + player_stats.damage * wep_bonus * round(random.uniform(0.7, 1.3), 3)
 
-        # Crit or non crit hit
-        return effective_damage * critical_bonus if random.randint(1, 100) <= critical_rate else effective_damage
+        # Checking if weapon hit
+        if random.randint(1, 100) <= hit_chance_percent:
+            # Crit or non crit hit
+            return effective_damage * critical_bonus if random.randint(1, 100) <= critical_rate else effective_damage
+        else:
+            return 0
 
     @staticmethod
     def _calculate_heal(player_stats: PlayerStats, base_heal: float, wep_bonus: float, disable_crit: bool = False) -> float:
@@ -116,7 +120,7 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
         base_damage = (weapon.regular_damage_lower + weapon.regular_damage_higher) / 2
 
         avg_damage = self._average_damage(self.player_stats, base_damage, weapon.regular_damage_bonus_percent)
-        reg_damage = self._calculate_damage(self.player_stats, base_damage, weapon.regular_damage_bonus_percent)
+        reg_damage = self._calculate_damage(self.player_stats, base_damage, weapon.regular_damage_bonus_percent, weapon.hit_chance_percent)
 
         # Handle bleed if applicable
         total_bleed_avg_damage = 0
@@ -125,7 +129,7 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
             bleed_avg = self._average_damage(self.player_stats, weapon.bleed_damage, weapon.bleed_bonus)
             total_bleed_avg_damage = bleed_avg * bleed_ticks
 
-            bleed_calc = self._calculate_damage(self.player_stats, weapon.bleed_damage, weapon.bleed_bonus)
+            bleed_calc = self._calculate_damage(self.player_stats, weapon.bleed_damage, weapon.bleed_bonus, weapon.hit_chance_percent)
             total_bleed_calc_damage = bleed_calc * bleed_ticks
 
         average_damage = round(avg_damage * multiplier + total_bleed_avg_damage, 3)
