@@ -70,7 +70,7 @@ class BasicHealDamageCalculation:
         critical_bonus = 0.25 + (player_stats.cbr / (0.5 * 1.05 ** (30 - 1))) / 100
 
         # Base + armor scaling
-        effective_damage = base_damage + player_stats.damage * wep_bonus * round(random.uniform(0.7, 1.3), 3)
+        effective_damage = (base_damage + player_stats.damage * wep_bonus) * round(random.uniform(0.7, 1.3), 3)
 
         # Checking if weapon hit
         if random.randint(1, 100) <= hit_chance_percent:
