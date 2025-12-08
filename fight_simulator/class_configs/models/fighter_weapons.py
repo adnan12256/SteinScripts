@@ -8,7 +8,8 @@ from fight_simulator.class_configs.models.common_weapons import CommonWeaponStat
 class FighterWeaponStats(CommonWeaponStats):
     bleed_damage: Optional[int] = None
     bleed_bonus: Optional[int] = None
-    energy: int
+    energy: Optional[int] = None
+    mana: Optional[int] = None
 
 
 class FighterWeapons(BaseModel):
@@ -18,6 +19,7 @@ class FighterWeapons(BaseModel):
     breaker: FighterWeaponStats
     shiver: FighterWeaponStats
     tear: FighterWeaponStats
+    cata_staff: FighterWeaponStats
 
     class Config:
         populate_by_name = True

@@ -156,6 +156,9 @@ class FighterDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def tear_damage(self) -> DamageMetrics:
         return self._weapon_damage_calculation(self.fighter_info.weapons.tear, multiplier=4)
 
+    def cata_staff_damage(self) -> DamageMetrics:
+        return self._weapon_damage_calculation(self.fighter_info.weapons.cata_staff)
+
 
 class MageDamage(BasicHealDamageCalculation, CharacterEquipArmor):
     def __init__(self):

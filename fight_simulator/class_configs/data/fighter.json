@@ -91,6 +91,15 @@
       "casttime_s": 0.6,
       "cooldown_s": 9,
       "energy": 6
+    },
+    "cata_staff": {
+      "regular_damage_lower": 68,
+      "regular_damage_higher": 127,
+      "regular_damage_bonus_percent": 100,
+      "casttime_s": 0.89,
+      "cooldown_s": 5.05,
+      "mana": 37,
+      "hit_chance_percent": 65
     }
   }
 }

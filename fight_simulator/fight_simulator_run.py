@@ -23,7 +23,8 @@ weapons_in_use: dict[str, FighterWeaponStats] = {
     "reckless_slam": fighter_handle.fighter_info.weapons.reckless_slam,
     "breaker": fighter_handle.fighter_info.weapons.breaker,
     "tear": fighter_handle.fighter_info.weapons.tear,
-    "shiver": fighter_handle.fighter_info.weapons.shiver
+    "shiver": fighter_handle.fighter_info.weapons.shiver,
+    "cata_staff": fighter_handle.fighter_info.weapons.cata_staff,
 }
 
 weapons_damage: dict[str, float] = {
@@ -32,7 +33,8 @@ weapons_damage: dict[str, float] = {
     "reckless_slam": 0,
     "breaker": 0,
     "tear": 0,
-    "shiver": 0
+    "shiver": 0,
+    "cata_staff": 0,
 }
 
 
@@ -43,8 +45,8 @@ print("=== Combat Simulation Start ===")
 
 while time < duration:
     if time % 1 == 0:
-        player_energy = min([max_energy, player_energy + energy_regen_per_sec])
-        player_mana = min([max_mana, player_mana + mana_regen_per_sec])
+        player_energy = round(min([max_energy, player_energy + energy_regen_per_sec]), 3)
+        player_mana = round(min([max_mana, player_mana + mana_regen_per_sec]), 3)
         print(f"New energy {player_energy}")
         print(f"New mana {player_mana}")
 
@@ -53,13 +55,13 @@ while time < duration:
         if cooldowns[wep_name] <= 0:
             # Controlling mana/energy
             enough_resource_to_use_skill = False
-            if hasattr(weapon, "energy") and player_energy >= weapon.energy:
+            if weapon.energy is not None and player_energy >= weapon.energy:
                 player_energy -= weapon.energy
-                player_energy = max(0, player_energy)
+                player_energy = round(max(0, player_energy), 3)
                 enough_resource_to_use_skill = True
-            if hasattr(weapon, "mana") and player_mana >= weapon.mana:
+            if weapon.mana is not None and player_mana >= weapon.mana:
                 player_mana -= weapon.mana
-                player_mana = max(0, player_mana)
+                player_mana = round(max(0, player_mana), 3)
                 enough_resource_to_use_skill = True
 
             if enough_resource_to_use_skill:
@@ -80,11 +82,13 @@ while time < duration:
                         dmg = fighter_handle.tear_damage().regular_damage
                     case "shiver":
                         dmg = fighter_handle.shiver_damage().regular_damage
+                    case "cata_staff":
+                        dmg = fighter_handle.cata_staff_damage().regular_damage
                     case _:
                         raise ValueError("Unknown Wep Name")
                 weapons_damage[wep_name] += dmg
 
-                print(f"{time:4.1f}s: Used {wep_name}, dealt {dmg}, energy left {player_energy:.1f}")
+                print(f"{time:4.1f}s: Used {wep_name}, dealt {dmg}, energy left {player_energy:.1f}, mana left {player_mana}")
 
     # tick down cooldowns
     for k in cooldowns:
@@ -97,7 +101,7 @@ total_dps = 0
 print(f"Fight Duration in seconds: {duration}")
 for wep, wep_damage in weapons_damage.items():
     print(f"Weapon: {wep}")
-    dps = wep_damage / duration
+    dps = round(wep_damage / duration, 3)
     total_dps += dps
     print(f"DPS: {dps}\n")
 
