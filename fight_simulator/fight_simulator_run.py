@@ -53,6 +53,15 @@ weapons_damage: dict[str, float] = {
     "shiver": 0,
     "cata_staff": 0,
 }
+weapons_count: dict[str, float] = {
+    "repeater": 0,
+    "cleaving_strike": 0,
+    "reckless_slam": 0,
+    "breaker": 0,
+    "tear": 0,
+    "shiver": 0,
+    "cata_staff": 0,
+}
 status_effects: list[StatusEffects] = []
 
 cooldowns: Dict[str, float] = {w: 0.0 for w in weapons_in_use}
@@ -132,7 +141,7 @@ while time < duration:
                     case _:
                         raise ValueError("Unknown Wep Name")
                 weapons_damage[wep_name] += dmg
-
+                weapons_count[wep_name] += 1
                 print(f"{time:4.1f}s: Used {wep_name}, dealt {dmg}, energy left {player_energy:.1f}, mana left {player_mana}")
 
     # tick down cooldowns
@@ -148,6 +157,17 @@ for wep, wep_damage in weapons_damage.items():
     print(f"Weapon: {wep}")
     dps = round(wep_damage / duration, 3)
     total_dps += dps
-    print(f"DPS: {dps}\n")
+    print(f"DPS: {dps}")
+
+    if weapons_in_use[wep].energy is not None:
+        resource_cost = weapons_in_use[wep].energy
+    elif weapons_in_use[wep].mana is not None:
+        resource_cost = weapons_in_use[wep].mana
+    else:
+        resource_cost = 1
+    print(f"Wep Use Count: {weapons_count[wep]}")
+    print(f"DPS/resource_cost: {dps/(1 if resource_cost == 0 else resource_cost)}")
+    print(f"Efficiency ((DPS/Total Energy Used)*100): {(dps/(weapons_count[wep] * (1 if resource_cost == 0 else resource_cost)))*100}")
+    print("\n")
 
 print(f"TOTAL DPS: {total_dps}")
