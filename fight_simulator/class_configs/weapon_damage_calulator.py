@@ -28,7 +28,6 @@ class PlayerStats:
     mana: int = 317
 
 
-
 @dataclass
 class DamageMetrics:
     average_damage: float
